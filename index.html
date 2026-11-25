@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>分体式飞行汽车的工程可行性 · 小鹏汇天「陆地航母」X3-F 全景调研</title>
+<meta name="description" content="吉林大学《飞行汽车技术基础》课程作业：小鹏汇天陆地航母 X3-F 的构型、分合机构、能量闭合、适航路径、应用场景与市场可行性全景调研。">
+<style>
+:root{
+  --bg:#06090F; --bg-soft:#0A0F18; --panel:#0B1119;
+  --line:#1A2533; --line-soft:#131B26;
+  --txt:#E8EDF4; --txt-2:#A6B3C4; --txt-3:#6E7D93;
+  --cyan:#41E3CE; --cyan-d:#1B6F69; --amber:#FFB347; --violet:#93A5FF; --red:#FF6B7A; --green:#7EE0A3;
+  --max:1240px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:88px}
+body{
+  margin:0; background:var(--bg); color:var(--txt);
+  font-family:"HarmonyOS Sans SC","Source Han Sans SC","Noto Sans CJK SC","PingFang SC","Microsoft YaHei",-apple-system,"Segoe UI",sans-serif;
+  font-size:15.5px; line-height:1.85; letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased; font-feature-settings:"tnum";
+}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:
+    linear-gradient(rgba(65,227,206,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(65,227,206,.028) 1px,transparent 1px);
+  background-size:72px 72px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 55% at 50% 0%,#000 0%,transparent 78%);
+          mask-image:radial-gradient(ellipse 80% 55% at 50% 0%,#000 0%,transparent 78%);
+}
+a{color:inherit; text-decoration:none}
+.mono{font-family:"JetBrains Mono","SFMono-Regular",Consolas,"Liberation Mono",monospace}
+.shell{max-width:var(--max); margin:0 auto; padding:0 30px; position:relative; z-index:1}
+
+/* ---------- top bar ---------- */
+.pbar{position:fixed; top:0; left:0; height:2px; width:100%; background:transparent; z-index:60}
+.pbar span{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--cyan),var(--violet)); box-shadow:0 0 12px rgba(65,227,206,.6)}
+.topbar{
+  position:sticky; top:0; z-index:50; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  background:rgba(6,9,15,.78); border-bottom:1px solid var(--line-soft);
+}
+.topbar .in{max-width:var(--max); margin:0 auto; padding:11px 30px; display:flex; justify-content:space-between; align-items:center; font-size:11.5px; letter-spacing:.14em; color:var(--txt-3)}
+.topbar .in b{color:var(--txt-2); font-weight:500}
+.topbar .in .dot{display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--cyan); margin-right:8px; vertical-align:1px; box-shadow:0 0 8px var(--cyan)}
+
+/* ---------- hero ---------- */
+.hero{padding:76px 0 0; border-bottom:1px solid var(--line); position:relative; overflow:hidden}
+.hero::after{
+  content:""; position:absolute; right:-10%; top:-30%; width:520px; height:520px; border-radius:50%;
+  background:radial-gradient(circle,rgba(65,227,206,.10),transparent 62%); pointer-events:none;
+}
+.kicker{font-family:"JetBrains Mono",Consolas,monospace; font-size:11px; letter-spacing:.24em; color:var(--cyan); text-transform:uppercase}
+h1{
+  font-size:clamp(34px,4.2vw,58px); line-height:1.14; letter-spacing:-.015em;
+  font-weight:600; margin:18px 0 10px; max-width:16em;
+}
+.h1sub{font-size:clamp(16px,1.6vw,20px); color:var(--txt-2); font-weight:400; margin:0 0 6px; line-height:1.6}
+.h1en{font-family:"JetBrains Mono",Consolas,monospace; font-size:11px; letter-spacing:.13em; color:var(--txt-3); text-transform:uppercase; margin:16px 0 0; max-width:70ch; line-height:1.8}
+.meta{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin:42px 0 0;
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+.meta div{padding:14px 18px; border-right:1px solid var(--line-soft)}
+.meta div:last-child{border-right:0}
+.meta dt{font-size:10px; letter-spacing:.16em; color:var(--txt-3); text-transform:uppercase; margin:0 0 5px}
+.meta dd{margin:0; font-size:13.5px; color:var(--txt-2); line-height:1.5}
+.meta dd b{color:var(--txt); font-weight:500}
+
+/* ---------- kpi ---------- */
+.kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); margin:0 0 0; border-bottom:1px solid var(--line)}
+.kpi{background:var(--bg); padding:22px 20px 20px}
+.kpi .v{font-family:"JetBrains Mono",Consolas,monospace; font-size:22px; color:var(--cyan); letter-spacing:-.02em; line-height:1.2}
+.kpi .v small{font-size:12px; color:var(--txt-2); letter-spacing:0; margin-left:3px}
+.kpi .l{font-size:11.5px; color:var(--txt-3); margin-top:8px; line-height:1.5}
+.kpi .t{font-size:10px; margin-top:9px; color:var(--amber); letter-spacing:.08em}
+
+/* ---------- layout ---------- */
+.layout{display:grid; grid-template-columns:196px minmax(0,1fr); gap:58px; align-items:start; padding:0 0 40px}
+.toc{position:sticky; top:64px; padding:34px 0 0; font-size:12px}
+.toc .tt{font-size:10px; letter-spacing:.18em; color:var(--txt-3); text-transform:uppercase; margin-bottom:14px}
+.toc a{display:flex; gap:10px; padding:6px 0; color:var(--txt-3); border-left:2px solid transparent; padding-left:10px; transition:color .18s,border-color .18s}
+.toc a:hover{color:var(--txt-2)}
+.toc a.on{color:var(--cyan); border-left-color:var(--cyan)}
+.toc a i{font-style:normal; font-family:"JetBrains Mono",Consolas,monospace; font-size:10px; opacity:.75; padding-top:3px}
+.doc{padding:34px 0 0; min-width:0}
+
+/* ---------- section ---------- */
+section{margin:0 0 10px}
+.sec-head{display:flex; align-items:baseline; gap:16px; margin:64px 0 22px; padding-top:24px; border-top:1px solid var(--line)}
+.sec-head .n{font-family:"JetBrains Mono",Consolas,monospace; font-size:12px; color:var(--cyan); letter-spacing:.1em; white-space:nowrap}
+.sec-head h2{font-size:25px; line-height:1.35; font-weight:600; margin:0; letter-spacing:-.005em}
+.sec-head .en{display:block; font-family:"JetBrains Mono",Consolas,monospace; font-size:10px; letter-spacing:.14em; color:var(--txt-3); text-transform:uppercase; margin-top:6px; font-weight:400}
+h3{font-size:17px; font-weight:600; margin:34px 0 12px; color:var(--txt); letter-spacing:0; padding-left:12px; border-left:2px solid var(--cyan-d)}
+h4{font-size:14px; font-weight:600; margin:22px 0 8px; color:var(--txt-2)}
+p{margin:0 0 16px; color:var(--txt-2)}
+p.lead{font-size:16.5px; color:var(--txt); line-height:1.9}
+p strong, li strong{color:var(--txt); font-weight:600}
+ul,ol{margin:0 0 18px; padding-left:22px; color:var(--txt-2)}
+li{margin:0 0 7px}
+li::marker{color:var(--cyan-d)}
+
+/* ---------- evidence tags ---------- */
+.tag{display:inline-block; font-size:10px; line-height:1.5; padding:1px 5px; border:1px solid; border-radius:2px; letter-spacing:.04em; vertical-align:2px; white-space:nowrap; font-weight:400}
+.ta{color:var(--cyan); border-color:rgba(65,227,206,.4); background:rgba(65,227,206,.07)}
+.tb{color:var(--green); border-color:rgba(126,224,163,.35); background:rgba(126,224,163,.06)}
+.tc{color:var(--amber); border-color:rgba(255,179,71,.4); background:rgba(255,179,71,.07)}
+.td{color:var(--violet); border-color:rgba(147,165,255,.38); background:rgba(147,165,255,.07); border-style:dashed}
+.ti{color:var(--amber); border-color:rgba(255,179,71,.5); background:transparent}
+.tq{color:var(--txt-3); border-color:rgba(110,125,147,.5); border-style:dashed}
+
+/* ---------- table ---------- */
+.tcap{font-size:11px; color:var(--txt-3); letter-spacing:.04em; margin:24px 0 8px; display:flex; gap:10px; align-items:baseline}
+.tcap b{color:var(--cyan); font-weight:500; font-family:"JetBrains Mono",Consolas,monospace; font-size:10.5px; letter-spacing:.08em}
+.tw{overflow-x:auto; border:1px solid var(--line); background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,0))}
+table.tbl{width:100%; border-collapse:collapse; font-size:12.8px; line-height:1.65; min-width:520px}
+.tbl th{
+  text-align:left; font-weight:500; font-size:10.5px; letter-spacing:.1em; color:var(--txt-3);
+  padding:11px 13px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.025); white-space:nowrap;
+}
+.tbl td{padding:11px 13px; border-bottom:1px solid var(--line-soft); color:var(--txt-2); vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr:hover td{background:rgba(65,227,206,.025)}
+.tbl td.n{font-family:"JetBrains Mono",Consolas,monospace; color:var(--txt); white-space:nowrap; font-size:12.2px}
+.tbl td.k{color:var(--txt); font-weight:500}
+.tbl .sub{display:block; font-size:11px; color:var(--txt-3); margin-top:3px; line-height:1.5}
+
+/* ---------- note ---------- */
+.note{border-left:2px solid var(--cyan); background:linear-gradient(90deg,rgba(65,227,206,.07),transparent 70%); padding:14px 18px; margin:22px 0; font-size:13.6px; color:var(--txt-2); line-height:1.8}
+.note b{color:var(--txt)}
+.note.warn{border-left-color:var(--amber); background:linear-gradient(90deg,rgba(255,179,71,.08),transparent 70%)}
+.note.risk{border-left-color:var(--red); background:linear-gradient(90deg,rgba(255,107,122,.08),transparent 70%)}
+.note .h{display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--cyan); margin-bottom:6px}
+.note.warn .h{color:var(--amber)}
+.note.risk .h{color:var(--red)}
+
+/* ---------- calc block ---------- */
+.eq{
+  font-family:"JetBrains Mono",Consolas,monospace; font-size:12.8px; line-height:2;
+  background:var(--panel); border:1px solid var(--line-soft); padding:14px 18px; margin:16px 0;
+  color:var(--txt-2); overflow-x:auto;
+}
+.eq .r{color:var(--cyan)}
+.eq .c{color:var(--txt-3)}
+.frac{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 3px; font-size:11.5px}
+.frac span:first-child{border-bottom:1px solid var(--txt-3); padding:0 4px 1px}
+.frac span:last-child{padding:1px 4px 0}
+
+/* ---------- figures ---------- */
+.fig{border:1px solid var(--line); background:var(--bg-soft); padding:16px; margin:22px 0 8px; position:relative; overflow:hidden}
+.fig svg{display:block; width:100%; height:auto}
+.figcap{font-size:11.5px; color:var(--txt-3); line-height:1.7; margin:9px 0 26px; padding-left:2px}
+.figcap b{color:var(--txt-2); font-weight:500}
+.svg-txt{font-family:"HarmonyOS Sans SC","Microsoft YaHei",sans-serif; font-size:12px; fill:var(--txt-2)}
+.svg-mono{font-family:"JetBrains Mono",Consolas,monospace; font-size:10.5px; fill:var(--txt-3); letter-spacing:.06em}
+.svg-box{fill:rgba(255,255,255,.03); stroke:#2A3A4C; stroke-width:1}
+.svg-hi{fill:rgba(65,227,206,.07); stroke:rgba(65,227,206,.55); stroke-width:1}
+.svg-am{fill:rgba(255,179,71,.07); stroke:rgba(255,179,71,.6); stroke-width:1}
+.svg-line{stroke:#2E4256; stroke-width:1}
+.svg-arrow{stroke:#3E5A72; stroke-width:1.2; fill:none}
+.svg-dash{stroke:rgba(65,227,206,.5); stroke-width:1; stroke-dasharray:4 3; fill:none}
+
+/* ---------- summary list ---------- */
+.findings{counter-reset:f; margin:10px 0 0; padding:0; list-style:none}
+.findings li{counter-increment:f; position:relative; padding:0 0 18px 44px; margin:0; border-left:1px solid var(--line-soft); margin-left:7px}
+.findings li:last-child{border-left-color:transparent; padding-bottom:0}
+.findings li::before{
+  content:counter(f,decimal-leading-zero); position:absolute; left:-8px; top:-2px;
+  font-family:"JetBrains Mono",Consolas,monospace; font-size:10.5px; color:var(--cyan);
+  background:var(--bg); padding:3px 0; width:16px; text-align:center;
+}
+.findings li b{color:var(--txt); font-weight:600}
+
+/* ---------- misc ---------- */
+.pill{display:inline-flex; gap:8px; flex-wrap:wrap; margin:2px 0 18px}
+.pill span{font-size:11px; color:var(--txt-3); border:1px solid var(--line); padding:4px 9px; border-radius:2px}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:18px 0}
+.card{border:1px solid var(--line); background:rgba(255,255,255,.015); padding:16px 18px}
+.card .t{font-size:10.5px; letter-spacing:.12em; color:var(--cyan); text-transform:uppercase; margin-bottom:8px}
+.card p{font-size:13px; margin:0; color:var(--txt-2)}
+.refs{font-size:12.5px; line-height:1.8; color:var(--txt-2); counter-reset:r}
+.refs li{margin:0 0 9px; padding-left:0}
+.refs a{color:var(--cyan-d); word-break:break-all; border-bottom:1px dotted var(--line)}
+.refs a:hover{color:var(--cyan)}
+sup.rc{font-family:"JetBrains Mono",Consolas,monospace; font-size:9.5px; color:var(--cyan-d); margin-left:1px}
+sup.rc a{border:0}
+
+/* ---------- english abstract ---------- */
+.abstract{border-bottom:1px solid var(--line); background:linear-gradient(180deg,rgba(65,227,206,.035),transparent 85%)}
+.abstract .in{max-width:var(--max); margin:0 auto; padding:30px 30px 34px; display:grid; grid-template-columns:128px 1fr; gap:26px; align-items:start}
+.abstract .lab{font-family:"JetBrains Mono",Consolas,monospace; font-size:9.5px; letter-spacing:.14em; color:var(--cyan); text-transform:uppercase; line-height:1.9; padding-top:3px; white-space:nowrap}
+.abstract p{margin:0; font-size:13.6px; line-height:1.85; color:var(--txt-2); font-family:"Inter","Segoe UI",system-ui,sans-serif; letter-spacing:0}
+.abstract p b{color:var(--txt); font-weight:600}
+footer{border-top:1px solid var(--line); margin-top:40px; padding:30px 0 60px; color:var(--txt-3); font-size:12px}
+footer .in{max-width:var(--max); margin:0 auto; padding:0 30px; display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap}
+
+@media (max-width:1040px){
+  .layout{grid-template-columns:1fr; gap:0}
+  .toc{position:static; display:none}
+  .meta{grid-template-columns:1fr 1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .grid2{grid-template-columns:1fr}
+}
+@media (max-width:620px){
+  .shell{padding:0 18px}
+  .topbar .in{padding:10px 18px; font-size:10px; letter-spacing:.1em}
+  .hero{padding-top:52px}
+  .meta{grid-template-columns:1fr}
+  .meta div{border-right:0; border-bottom:1px solid var(--line-soft)}
+  .sec-head{gap:10px; flex-wrap:wrap}
+  .sec-head h2{font-size:20px}
+  .findings li{padding-left:36px}
+}
+@media print{
+  body{background:#fff; color:#000}
+  body::before,.topbar,.toc,.pbar{display:none}
+  .layout{display:block}
+  .shell{max-width:none; padding:0}
+  .hero,.kpis,.fig,.tw{break-inside:avoid}
+  p,td,li{color:#111}
+}
+</style>
+</head>
+<body>
+<div class="pbar"><span id="pbar"></span></div>
+
+<div class="topbar"><div class="in">
+  <div><span class="dot"></span><b>吉林大学 · 飞行汽车技术基础</b> / 课程作业</div>
+  <div>ASSIGNMENT 01 — SURVEY &amp; FEASIBILITY</div>
+</div></div>
+
+<header class="hero">
+  <div class="shell">
+    <div class="kicker">Case Study / 2026.11 / Evidence cut-off 24 Nov</div>
+    <h1>分体式飞行汽车的工程可行性</h1>
+    <p class="h1sub">小鹏汇天「陆地航母」X3-F 全景调研：构型、接口、取证与市场</p>
+    <p class="h1en">The Modular Flying Car — Architecture, Interface Chain, Certification Path and Market Feasibility of the Aridge Land Aircraft Carrier</p>
+
+    <dl class="meta">
+      <div><dt>研究对象</dt><dd><b>小鹏汇天「陆地航母」</b><br>飞行体型号 X3-F（分体式）</dd></div>
+      <div><dt>作者 / 单位</dt><dd><b>韦国全</b><br>吉林大学 汽车工程学院 · 工业设计 2023 级</dd></div>
+      <div><dt>证据截止</dt><dd><b>2026-11-24</b><br>公开来源，A/B/C/D 四级标注</dd></div>
+      <div><dt>文档</dt><dd><b>v1.0 · 作业 01</b><br>Web 版，建议 1440px 宽屏阅读</dd></div>
+    </dl>
+
+    <div class="kpis">
+      <div class="kpi"><div class="v">6 834 × 6 340 <small>mm</small></div><div class="l">展开状态外形包络（长 × 宽），高 1 923 mm</div><div class="t">A 级 · 专用条件</div></div>
+      <div class="kpi"><div class="v">2 934 × 1 777 <small>mm</small></div><div class="l">全折叠收纳包络，高 1 312 mm；可装入陆行体后舱</div><div class="t">A 级 · 专用条件</div></div>
+      <div class="kpi"><div class="v">20 / 20 <small>km / min</small></div><div class="l">最大航程与最大航时；最大高度 120 m AGL，VNE 72 km/h</div><div class="t">A 级 · 草案值</div></div>
+      <div class="kpi"><div class="v">880 / 960 <small>kg</small></div><div class="l">最大起飞重量：同一文件内出现两个口径，需以 TCDS 为准</div><div class="t">口径冲突 · 待核实</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="abstract"><div class="in">
+  <div class="lab">Abstract<br>EN</div>
+  <p>This report examines the Aridge (XPeng AeroHT) <b>Land Aircraft Carrier</b>, a modular flying car made of a 6×6 range-extended ground carrier and a two-seat, six-rotor flight module designated <b>X3-F</b>. Drawing on the CAAC special-condition proposal, FAA and EASA rulemaking, and company disclosures, it reconstructs the vehicle architecture, quantifies the fold–dock–lock chain, and tests the energy closure at maximum take-off weight. Three findings stand out. First, the aircraft is certified in the <b>light-sport category for day-VFR private and training use only</b>, which legally confines it to experience flying rather than air-taxi service. Second, geometric and momentum-theory checks suggest the published 20-minute endurance is quoted at a mission weight well below MTOW. Third, the real engineering bottleneck is not the rotor system but the <b>ground interface chain</b>, where automotive cost targets meet aviation reliability requirements. The report closes with a capability ladder — L2 verified, L3 open, L4 not started — and a gate-based industrialisation roadmap.</p>
+</div></section>
+
+<main class="shell layout">
+  <aside class="toc">
+    <div class="tt">Contents</div>
+    <a href="#s0"><i>00</i>摘要与主要判断</a>
+    <a href="#s1"><i>01</i>研究设计与证据边界</a>
+    <a href="#s2"><i>02</i>产品定义：分体式的代价</a>
+    <a href="#s3"><i>03</i>系统架构与总体参数</a>
+    <a href="#s4"><i>04</i>折叠—对接—锁止链路</a>
+    <a href="#s5"><i>05</i>构型、气动与能量闭合</a>
+    <a href="#s6"><i>06</i>技术可行性分级</a>
+    <a href="#s7"><i>07</i>适航与监管路径</a>
+    <a href="#s8"><i>08</i>国际坐标与竞品对照</a>
+    <a href="#s9"><i>09</i>应用场景的边界</a>
+    <a href="#s10"><i>10</i>市场可行性</a>
+    <a href="#s11"><i>11</i>工程化路线</a>
+    <a href="#s12"><i>12</i>局限与待核实</a>
+    <a href="#refs"><i>13</i>参考文献</a>
+  </aside>
+
+  <div class="doc">
+
+  <section id="s0">
+    <div class="sec-head"><span class="n">00</span><h2>摘要与主要判断<span class="en">Executive Summary</span></h2></div>
+    <p class="lead">这份调研不回答"飞行汽车会不会改变交通"，而回答一个更窄、可验证的问题：<strong>「陆地航母」在 2026 年 11 月这个时间点上，技术上做到了什么、法规上被允许做什么、商业上能卖什么。</strong>三个答案并不一致，而不一致之处正是本文的重点。</p>
+
+    <ol class="findings">
+      <li><b>它的技术本质是"两件产品加一套接口"，不是一架会飞的汽车。</b>拆开看：飞行体是一架 880–960 kg、双座、20 km／20 min 的电动六旋翼；陆行体是一台 6×6 增程运载车；真正的创新集中在两者之间的分合机构（8 个控制模块、14 个作动机构、约 5 min 完成装载或释放）<sup class="rc"><a href="#r12">[12]</a></sup>。</li>
+      <li><b>"双涵道"不是增推装置，这一细节被多数报道误读。</b>专用条件 X3.1433 把它定义为"用于在电动发动机失效后为航空器提供偏航力矩的电涵道"，属于降级控制资源<sup class="rc"><a href="#r1">[1]</a></sup>。把涵道算作升力部件，会高估悬停推力裕度。</li>
+      <li><b>折叠是整机最脆弱的机械链。</b>展开包络 6.834 × 6.340 × 1.923 m，收纳包络 2.934 × 1.777 × 1.312 m，三向折叠比 2.33 / 3.57 / 1.47。几何核算表明：单级铰链无法把 2.62 m 的机臂收进 1.777 m 宽，至少需要"根部回转 + 中段折叠"两级，每个自由度都要位置反馈与锁止确认。</li>
+      <li><b>能量账在最大起飞重量下不闭合。</b>一阶动量理论给出悬停功率 175–210 kW；20 min 需 58–70 kWh，加 20% 余量后 70–84 kWh。若第三方估计的约 50 kWh 电池成立，则 {880 kg, 20 min, 50 kWh} 三者互不相容——官方从未披露电池容量，这是必须优先补齐的证据缺口。</li>
+      <li><b>取证类别决定了产品属性。</b>X3-F 走轻型运动类（LSA）路径，专用条件明确：限昼间目视飞行、用于私人娱乐与飞行培训、<strong>不用于商业载客</strong>，最大高度 120 m、航程 20 km、航时 20 min<sup class="rc"><a href="#r1">[1]</a></sup>。它不是空中出租车，是"个人飞行器 + 运载母舰"。</li>
+      <li><b>进度真实存在，但四证只走到一半。</b>TC 于 2024-03 受理、PC 于 2025-05 受理，2026-07 入选民航局首批民用载人 eVTOL 适航审定合规企业名录<sup class="rc"><a href="#r22">[22]</a></sup>；截至证据截止日，未见公开的 TC 颁证公告，企业交付口径已由 2026 年推迟至 2027 年中<sup class="rc"><a href="#r21">[21]</a></sup>。</li>
+      <li><b>订单数字强，但性质是"意向"。</b>累计 7 000 台订单、单价不超过 200 万元、规划年产 1 万台<sup class="rc"><a href="#r21">[21]</a></sup>；中东示范项目另有采购计划，但台数与金额未经企业正式披露<span class="tag tq">待核实</span>。在取证与产能双重不确定下，意向订单不能折成收入。</li>
+      <li><b>结论：技术分级为 L2 已验证、L3 未闭合、L4 未启动。</b>商业上是高客单价体验装备，成立前提是营地与培训网络，而不是通勤替代。若把它当交通工具估值，会系统性高估市场；若把它当"能飞的超跑"估值，反而更接近真实。</li>
+    </ol>
+  </section>
+
+  <section id="s1">
+    <div class="sec-head"><span class="n">01</span><h2>研究设计与证据边界<span class="en">Method &amp; Evidence Boundary</span></h2></div>
+    <p>本文把证据分为四级。分级不是为了显得严谨，而是因为在飞行汽车这个题材里，<strong>企业口径、媒体转述与局方文件经常互相矛盾</strong>，不区分来源就无法判断一句话能不能用。</p>
+
+    <div class="tcap"><b>表 1-1</b>证据分级规则与本文用法</div>
+    <div class="tw"><table class="tbl">
+      <tr><th style="width:86px">等级</th><th style="width:230px">来源类型</th><th>在本文中的用法</th><th style="width:96px">示例</th></tr>
+      <tr><td class="k"><span class="tag ta">A</span></td><td>局方文件、适航规章、国家标准、ASTM 标准</td><td>定义合法性边界与技术强制要求，可直接作为结论依据</td><td>X3-F 专用条件、AC-21-AA-2026-45</td></tr>
+      <tr><td class="k"><span class="tag tb">B</span></td><td>企业官网、发布会、上市公司公告</td><td>定义企业主张与产品参数，需与 A 级交叉核对</td><td>汇天官网、订单与产能披露</td></tr>
+      <tr><td class="k"><span class="tag tc">C</span></td><td>第三方权威媒体、行业数据库、券商研究</td><td>补齐时间线、价格、订单等 A/B 级不披露的信息</td><td>财新、澎湃、雷峰网、eVTOL 认证追踪</td></tr>
+      <tr><td class="k"><span class="tag td">D</span></td><td>自媒体、二手转述、论坛帖</td><td>仅在没有替代来源时使用，并明确标注置信度低</td><td>试飞进度、内部排产传言</td></tr>
+    </table></div>
+
+    <p>三条处理原则贯穿全文。<strong>第一，冲突并列，不做平均。</strong>例如最大起飞重量，专用条件"背景"章节写 880 kg，而正文 X3.1(a)(4) 写"不超过 960 公斤"，本文两个都保留——最终值只能以局方颁证数据单（TCDS）为准。<strong>第二，凡是推出来的数字，标注【工程推断】并写明假设。</strong>折叠级数、悬停功率、对接容差、锁销载荷都属于这一类。<strong>第三，查不到的不写死，标注【待核实】并说明缺口。</strong></p>
+
+    <div class="tcap"><b>表 1-2</b>关键陈述的证据矩阵（节选）</div>
+    <div class="tw"><table class="tbl">
+      <tr><th style="width:34px">#</th><th>陈述</th><th style="width:150px">主要依据</th><th style="width:62px">等级</th><th style="width:84px">置信度</th></tr>
+      <tr><td class="n">1</td><td>展开包络 6 834 × 6 340 × 1 923 mm；收纳 2 934 × 1 777 × 1 312 mm</td><td>X3-F 专用条件（征求意见稿）概述</td><td><span class="tag ta">A</span></td><td>高</td></tr>
+      <tr><td class="n">2</td><td>6 台电动发动机、6 副定距螺旋桨，差速控制；2 具电涵道用于失效后偏航</td><td>专用条件 X3.1433、附件 C/D</td><td><span class="tag ta">A</span></td><td>高</td></tr>
+      <tr><td class="n">3</td><td>1 名驾驶员 + 1 名乘客；限昼间 VFR；私人娱乐与培训；不商业载客</td><td>专用条件概述、X3.1559</td><td><span class="tag ta">A</span></td><td>高</td></tr>
+      <tr><td class="n">4</td><td>最大高度 120 m AGL、航程 20 km、航时 20 min、风速限值 8.74 m/s</td><td>专用条件 X3.143、概述</td><td><span class="tag ta">A</span></td><td>中高（草案值）</td></tr>
+      <tr><td class="n">5</td><td>VNE 72 km/h</td><td>媒体引述草案，正文未见</td><td><span class="tag tc">C</span></td><td>中</td></tr>
+      <tr><td class="n">6</td><td>陆行体 6×6、增程、综合续航 &gt;1 000 km、满油满电补能 6 次、C 照可驾</td><td>企业官方发布（经多家媒体转述）</td><td><span class="tag tb">B</span></td><td>中高</td></tr>
+      <tr><td class="n">7</td><td>订单 7 000 台、单价 &lt;200 万元、2027 年中交付</td><td>企业负责人 + 雷峰网</td><td><span class="tag tc">C</span></td><td>中</td></tr>
+      <tr><td class="n">8</td><td>TC 受理 2024-03-21、PC 受理 2025-05-09</td><td>民航中南局受理通知、企业公告</td><td><span class="tag ta">A</span><span class="tag tb">B</span></td><td>高</td></tr>
+      <tr><td class="n">9</td><td>2025-09-16 长春航展双机接触、一机着陆后起火</td><td>企业声明（澎湃、财新、每经）</td><td><span class="tag tb">B</span><span class="tag tc">C</span></td><td>高（事实）/ 低（原因）</td></tr>
+      <tr><td class="n">10</td><td>截至 2026-11-24 无公开 TC 颁证公告</td><td>局方证件公示 + 公开检索</td><td><span class="tag tq">待核实</span></td><td>中（公示可能不完整）</td></tr>
+    </table></div>
+
+    <div class="note warn"><span class="h">口径提示</span>同一份征求意见稿内部就存在 880 kg 与 960 kg 两个最大起飞重量。相差 9% 会显著改变悬停功率、结构载荷与折叠机构受力，因此本文在涉及载荷的计算中同时给出两档，而不是替读者选一个。</div>
+  </section>
+
+  <section id="s2">
+    <div class="sec-head"><span class="n">02</span><h2>产品定义：分体式的代价与收益<span class="en">Product Definition — What Modularity Buys and Costs</span></h2></div>
+    <p>课程把飞行汽车按构型与运行方式分为<strong>纯飞式、分体式、两栖式</strong>三类<sup class="rc"><a href="#r11">[11]</a></sup>。本案属分体式：飞行体与陆行体在物理上可分离，飞行时只带走飞行体，地面机动由陆行体承担。这个定义看似只是分类，实际决定了整个产品的工程结构与商业模型。</p>
+
+    <div class="grid2">
+      <div class="card"><div class="t">收益 / What modularity buys</div>
+        <p>飞行体不必背负车轮、传动、车身与碰撞结构，起飞重量可压到 1 吨级；陆行体按汽车法规设计，不受航空结构、疲劳与坠撞条款约束；飞行体可折叠入舱，随车运输，摆脱"必须停在有机场的地方"这一根本约束。</p></div>
+      <div class="card"><div class="t">代价 / What modularity costs</div>
+        <p>多出一整条地面链路：折叠—收纳—对接—锁止—补能—展开。每个环节都是潜在失效点，且全部发生在"人、车、机"三者靠近的场景里。接口精度、重复定位、锁止确认、异物防护，都要按航空件的可靠性标准做，却只能按汽车件的成本目标定价。</p></div>
+    </div>
+
+    <p>由此得到本文的核心判断：<strong>分体式是"用接口复杂度换重量与法规解耦"的一次交易。</strong>这笔交易在技术上成立——折叠收纳让 6.8 m 翼展的飞行器进入 5.5 m 车长的后舱；在法规上更成立——飞行体走适航、陆行体走汽车公告，两套体系互不拖累；但在可靠性上要付利息，因为接口是串联环节，任一环失效，整机不可用甚至不安全。</p>
+
+    <div class="note"><span class="h">一个常被忽略的第二道门槛</span>分体式必须同时通过两套准入：飞行体的 TC/PC/AC，以及陆行体的工信部公告与 CCC 认证。截至证据截止日，公开信息只能确认前者的受理，未见陆行体完成汽车公告准入的披露<span class="tag tq">待核实</span>。任何一套滞后，产品都无法"合法上路 + 合法起飞"。</div>
+  </section>
+
+  <section id="s3">
+    <div class="sec-head"><span class="n">03</span><h2>系统架构与总体参数<span class="en">System Architecture &amp; Specification</span></h2></div>
+    <p>把整机拆成机械、能量、信息三个域，可以看清一件事：<strong>三个域的交点全部落在分合机构上。</strong>它同时是结构件、高压/冷却接口和数据接口，因此它不是"一个夹具"，而是整机最复杂的跨域系统。</p>
+
+    <div class="fig">
+      <svg viewBox="0 0 920 420" role="img" aria-label="陆地航母三域架构图">
+        <defs>
+          <marker id="ar1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+            <path d="M0,0 L7,3.5 L0,7 z" fill="#3E5A72"/>
+          </marker>
+        </defs>
+        <!-- domain labels -->
+        <text class="svg-mono" x="18" y="34">MECHANICAL DOMAIN 机械域</text>
+        <text class="svg-mono" x="18" y="176">ENERGY DOMAIN 能量域</text>
+        <text class="svg-mono" x="18" y="318">INFORMATION DOMAIN 信息域</text>
+
+        <!-- row 1 -->
+        <rect class="svg-box" x="120" y="50" width="150" height="58" rx="3"/>
+        <text class="svg-txt" x="195" y="73" text-anchor="middle">陆行体</text>
+        <text class="svg-mono" x="195" y="92" text-anchor="middle">6×6 · 主动悬架</text>
+
+        <rect class="svg-am" x="330" y="42" width="220" height="74" rx="3"/>
+        <text class="svg-txt" x="440" y="66" text-anchor="middle">分合机构（跨域交点）</text>
+        <text class="svg-mono" x="440" y="85" text-anchor="middle">8 控制模块 · 14 作动机构</text>
+        <text class="svg-mono" x="440" y="102" text-anchor="middle">约 5 min 装载 / 释放</text>
+
+        <rect class="svg-box" x="610" y="50" width="170" height="58" rx="3"/>
+        <text class="svg-txt" x="695" y="73" text-anchor="middle">飞行体 X3-F</text>
+        <text class="svg-mono" x="695" y="92" text-anchor="middle">6 臂 + 4 点滑橇</text>
+
+        <line class="svg-arrow" x1="270" y1="79" x2="324" y2="79" marker-end="url(#ar1)"/>
+        <line class="svg-arrow" x1="550" y1="79" x2="604" y2="79" marker-end="url(#ar1)"/>
+
+        <!-- row 2 -->
+        <rect class="svg-box" x="120" y="192" width="150" height="58" rx="3"/>
+        <text class="svg-txt" x="195" y="215" text-anchor="middle">增程器 + 800V 母线</text>
+        <text class="svg-mono" x="195" y="234" text-anchor="middle">车端补能 6 次</text>
+
+        <rect class="svg-am" x="330" y="184" width="220" height="74" rx="3"/>
+        <text class="svg-txt" x="440" y="208" text-anchor="middle">直流快充 + 冷却快接</text>
+        <text class="svg-mono" x="440" y="227" text-anchor="middle">30→80% / 18 min</text>
+        <text class="svg-mono" x="440" y="244" text-anchor="middle">约 83 kW 平均</text>
+
+        <rect class="svg-box" x="610" y="192" width="230" height="58" rx="3"/>
+        <text class="svg-txt" x="725" y="215" text-anchor="middle">动力电池 → 6 ESC → 6 PMSM</text>
+        <text class="svg-mono" x="725" y="234" text-anchor="middle">+ 2 电涵道（偏航备份）</text>
+
+        <line class="svg-arrow" x1="270" y1="221" x2="324" y2="221" marker-end="url(#ar1)"/>
+        <line class="svg-arrow" x1="550" y1="221" x2="604" y2="221" marker-end="url(#ar1)"/>
+
+        <!-- row 3 -->
+        <rect class="svg-box" x="120" y="334" width="150" height="58" rx="3"/>
+        <text class="svg-txt" x="195" y="357" text-anchor="middle">座舱 HMI</text>
+        <text class="svg-mono" x="195" y="376" text-anchor="middle">单杆 · 模式指示</text>
+
+        <rect class="svg-am" x="330" y="326" width="220" height="74" rx="3"/>
+        <text class="svg-txt" x="440" y="350" text-anchor="middle">分合控制器 + 锁止反馈</text>
+        <text class="svg-mono" x="440" y="369" text-anchor="middle">位置 / 到位 / 互锁</text>
+        <text class="svg-mono" x="440" y="386" text-anchor="middle">起飞许可与状态提示</text>
+
+        <rect class="svg-box" x="610" y="334" width="230" height="58" rx="3"/>
+        <text class="svg-txt" x="725" y="357" text-anchor="middle">飞控（三通道）+ 执行机构</text>
+        <text class="svg-mono" x="725" y="376" text-anchor="middle">包线保护 · 飞前自检</text>
+
+        <line class="svg-arrow" x1="270" y1="363" x2="324" y2="363" marker-end="url(#ar1)"/>
+        <line class="svg-arrow" x1="550" y1="363" x2="604" y2="363" marker-end="url(#ar1)"/>
+
+        <!-- coupling bracket -->
+        <line class="svg-dash" x1="440" y1="118" x2="440" y2="182"/>
+        <line class="svg-dash" x1="440" y1="260" x2="440" y2="324"/>
+        <text class="svg-mono" x="452" y="150" fill="#41E3CE">同一组机械接口</text>
+        <text class="svg-mono" x="452" y="292" fill="#41E3CE">承载 / 导电 / 传数据</text>
+      </svg>
+      <div class="figcap"><b>图 3-1</b>三域架构示意。分合机构同时承担结构承载、高压与冷却连接、锁止状态上报三类功能，是整机唯一的跨域单点。依据：专用条件 X3.513、X3.612、X3.729 及企业公开资料<span class="tag tb">B</span>。</div>
+    </div>
+
+    <div class="tcap"><b>表 3-1</b>总体参数与证据状态</div>
+    <div class="tw"><table class="tbl">
+      <tr><th style="width:150px">项目</th><th style="width:200px">数值</th><th>工程含义</th><th style="width:76px">等级</th></tr>
+      <tr><td class="k">展开包络</td><td class="n">6 834 × 6 340 × 1 923 mm</td><td>长宽接近正方形，说明六个升力单元沿周向均布，不是"长机身 + 短翼"布局</td><td><span class="tag ta">A</span></td></tr>
+      <tr><td class="k">收纳包络</td><td class="n">2 934 × 1 777 × 1 312 mm</td><td>宽度收缩最狠（3.57 倍），高度只降 1.47 倍，折叠以"平面内收拢"为主</td><td><span class="tag ta">A</span></td></tr>
+      <tr><td class="k">最大起飞重量</td><td class="n">880 / 960 kg</td><td>两个口径差 9%，直接改变悬停功率与锁销载荷</td><td><span class="tag tq">冲突</span></td></tr>
+      <tr><td class="k">乘员</td><td class="n">1 驾驶员 + 1 乘客</td><td>按 X3.785 每人 77 kg 设计座椅与约束</td><td><span class="tag ta">A</span></td></tr>
+      <tr><td class="k">航程 / 航时</td><td class="n">20 km / 20 min</td><td>折算平均地速约 60 km/h，与 VNE 72 km/h 相容；说明航时几乎全用于任务，无长巡航段</td><td><span class="tag ta">A</span></td></tr>
+      <tr><td class="k">最大高度</td><td class="n">120 m AGL（2 500 m MSL）</td><td>低于常用无人机隔离空域上限，刻意避开有人机航路</td><td><span class="tag ta">A</span></td></tr>
+      <tr><td class="k">风限值</td><td class="n">0–8.74 m/s（17 kt）</td><td>约 5 级风；这是运行边界，不是结构极限</td><td><span class="tag ta">A</span></td></tr>
+      <tr><td class="k">动力</td><td class="n">6 × 定距桨，差速控制</td><td>无总距、无周期变距，姿态控制全部依赖转速差与推力分配</td><td><span class="tag ta">A</span></td></tr>
+      <tr><td class="k">偏航备份</td><td class="n">2 × 电涵道</td><td>失效后提供偏航力矩，不是升力部件</td><td><span class="tag ta">A</span></td></tr>
+      <tr><td class="k">补能</td><td class="n">30→80% / 18 min；车端可补 6 次</td><td>对应约 83 kW 平均充电功率；受增程器功率约束</td><td><span class="tag tb">B</span></td></tr>
+    </table></div>
+  </section>
+
+  <section id="s4">
+    <div class="sec-head"><span class="n">04</span><h2>折叠—对接—锁止链路<span class="en">The Fold–Dock–Lock Chain</span></h2></div>
+    <p>这一章是全文的技术核心。它回答一个具体问题：<strong>把 6.34 m 宽的飞行体塞进 1.777 m 宽的后舱，工程上到底要做哪些事，代价是什么。</strong>所有计算都基于公开包络尺寸，假设均显式列出。</p>
+
+    <h3>4.1 折叠几何：为什么必须两级铰链</h3>
+    <div class="tcap"><b>表 4-1</b>三向折叠比与收纳体积</div>
+    <div class="tw"><table class="tbl">
+      <tr><th>方向</th><th>展开 / mm</th><th>收纳 / mm</th><th>折叠比</th><th>判断</th></tr>
+      <tr><td class="k">纵向 X</td><td class="n">6 834</td><td class="n">2 934</td><td class="n">2.33</td><td>机头/滑橇可伸缩或随臂收拢</td></tr>
+      <tr><td class="k">横向 Y</td><td class="n">6 340</td><td class="n">1 777</td><td class="n">3.57</td><td>折叠的主力方向，决定铰链级数</td></tr>
+      <tr><td class="k">垂向 Z</td><td class="n">1 923</td><td class="n">1 312</td><td class="n">1.47</td><td>仅下降 0.61 m，说明不是"立起来收"</td></tr>
+    <tr><td class="k">包络体积</td><td class="n">83.3 m³</td><td class="n">6.84 m³</td><td class="n">12.2</td><td>体积比远大于线尺寸比，折叠是"填满空间"而非等比缩放</td></tr>
+    </table></div>
+
+    <p>关键约束在横向。设机身（含桨毂）宽度约 1.10 m，则单臂长度约 <span class="mono">(6.34 − 1.10)/2 = 2.62 m</span>；收纳后允许的半宽仅 <span class="mono">1.777/2 = 0.888 m</span>。若只在臂根设一个铰链、在平面内回转，臂在任一方向的投影长度仍是 2.62 m，无法进入 0.888 m 的半宽——<strong>单级铰链在几何上不可行</strong>。</p>
+
+    <p>把臂分成两段（各 1.31 m），中段绕铰链折转 θ，则折叠后投影半径 <span class="mono">r = √(2L²(1+cosθ))</span>：</p>
+    <div class="eq">
+      θ = 90° → r = 1.85 m <span class="c">（仍超限）</span><br>
+      θ = 120° → r = 1.31 m <span class="c">（仍超限）</span><br>
+      θ = 150° → r = <span class="r">0.68 m &lt; 0.888 m ✓</span><br>
+      θ = 180° → r = 0.00 m <span class="c">（完全贴合，但铰链干涉风险高）</span>
+    </div>
+    <p>因此工程解只能是"<strong>根部回转 + 中段折叠 ≥150° + 桨叶单独折叠</strong>"。按 6 副机臂计，至少 12 个臂部自由度加 6 个桨叶自由度；每个自由度都需要位置传感器与锁止确认，否则无法回答"到底展没展开"这个起飞前必须回答的问题。<span class="tag ti">工程推断</span></p>
+
+    <div class="fig">
+      <svg viewBox="0 0 920 260" role="img" aria-label="折叠序列示意">
+        <g>
+          <text class="svg-mono" x="40" y="26">① DEPLOYED 展开</text>
+          <circle cx="150" cy="150" r="96" class="svg-dash"/>
+          <rect class="svg-box" x="118" y="132" width="64" height="36" rx="4"/>
+          <line class="svg-line" x1="182" y1="150" x2="246" y2="150" stroke-width="5" stroke="#41617D"/>
+          <circle cx="252" cy="150" r="17" fill="none" stroke="#41E3CE" stroke-width="1.2" stroke-dasharray="3 3"/>
+          <text class="svg-mono" x="150" y="212" text-anchor="middle">单臂 2.62 m</text>
+        </g>
+        <g>
+          <text class="svg-mono" x="370" y="26">② MID-FOLD 中段折叠 150°</text>
+          <rect class="svg-box" x="438" y="132" width="64" height="36" rx="4"/>
+          <line class="svg-line" x1="502" y1="150" x2="566" y2="150" stroke-width="5" stroke="#41617D"/>
+          <line class="svg-line" x1="566" y1="150" x2="600" y2="184" stroke-width="5" stroke="#FFB347"/>
+          <circle cx="604" cy="188" r="17" fill="none" stroke="#FFB347" stroke-width="1.2" stroke-dasharray="3 3"/>
+          <path d="M566,150 A34,34 0 0 1 592,166" class="svg-dash"/>
+          <text class="svg-mono" x="560" y="212" text-anchor="middle">投影 0.68 m ✓</text>
+        </g>
+        <g>
+          <text class="svg-mono" x="700" y="26">③ ROOT SWING 根部回转</text>
+          <rect class="svg-box" x="768" y="132" width="36" height="64" rx="4"/>
+          <line class="svg-line" x1="786" y1="196" x2="786" y2="244" stroke-width="5" stroke="#41617D"/>
+          <line class="svg-line" x1="786" y1="244" x2="820" y2="212" stroke-width="5" stroke="#FFB347"/>
+          <circle cx="824" cy="208" r="15" fill="none" stroke="#FFB347" stroke-width="1.2" stroke-dasharray="3 3"/>
+          <path d="M786,196 A48,48 0 0 1 834,196" class="svg-dash"/>
+          <text class="svg-mono" x="786" y="150" text-anchor="middle">贴舱收纳</text>
+        </g>
+      </svg>
+      <div class="figcap"><b>图 4-1</b>折叠序列示意（非按比例）。三级动作对应三种失效模式：中段锁未锁、根部未到位、桨叶与舱壁干涉。依据：包络尺寸为 <span class="tag ta">A</span>，铰链级数为 <span class="tag ti">工程推断</span>。</div>
+    </div>
+
+    <h3>4.2 对接容差：为什么必须有主动引导</h3>
+    <p>分合过程是"车找机"而不是"机找车"，误差源分布在车、机、地三侧。按汽车行业常见的定位精度取值，做一个容差预算：</p>
+    <div class="tcap"><b>表 4-2</b>对接容差预算（教学假设，非厂家数据）</div>
+    <div class="tw"><table class="tbl">
+      <tr><th>误差源</th><th>典型值 / mm</th><th>说明</th></tr>
+      <tr><td class="k">车辆停位（视觉/超声引导）</td><td class="n">±15</td><td>驾驶员倒车至引导框内，横向残余偏差</td></tr>
+      <tr><td class="k">悬架高度调节</td><td class="n">±8</td><td>6 轮主动悬架调平，受地面坡度影响</td></tr>
+      <tr><td class="k">作动机构行程控制</td><td class="n">±5</td><td>14 个作动器的位置环精度</td></tr>
+      <tr><td class="k">锁销锥面导入</td><td class="n">±6</td><td>锥角与导入深度的几何容差</td></tr>
+      <tr><td class="k">机身停放偏移</td><td class="n">±10</td><td>风载、地面不平、滑橇压缩量差异</td></tr>
+      <tr><td class="k">最坏情况线性和</td><td class="n">44</td><td>全部同向，概率极低</td></tr>
+      <tr><td class="k">均方根合成 RSS</td><td class="n">21.2</td><td>独立随机误差的统计合成</td></tr>
+    </table></div>
+    <p>若锁销锥面设计成 ±25 mm 可导入，则 RSS 合成下余量约 3.8 mm，最坏情况下仍会顶死。<strong>结论：必须引入视觉或超声主动引导 + 悬架主动调平，纯机械导向不够。</strong>这也解释了为什么分合机构要 8 个控制模块——它不是简单的"举升 + 推入"，而是一个带闭环的对接机器人。<span class="tag ti">工程推断</span></p>
+
+    <h3>4.3 锁止与承载：强度不是瓶颈，刚度与疲劳才是</h3>
+    <p>运输工况按 3 g 垂向准静态 + 1.5 安全系数估算。若设 4 个锁止点：</p>
+    <div class="eq">
+      F<sub>单点</sub> = <span class="frac"><span>m · g · n<sub>z</sub> · k</span><span>N<sub>lock</sub></span></span>
+      = <span class="frac"><span>880 × 9.81 × 3 × 1.5</span><span>4</span></span>
+      ≈ <span class="r">9.7 kN / 点</span>
+    </div>
+    <div class="tcap"><b>表 4-3</b>锁销载荷敏感性（880 kg 起飞重量）</div>
+    <div class="tw"><table class="tbl">
+      <tr><th>锁止点数</th><th>2 g</th><th>3 g</th><th>5 g</th><th>工程评价</th></tr>
+      <tr><td class="k">2 点</td><td class="n">13.0 kN</td><td class="n">19.4 kN</td><td class="n">32.4 kN</td><td>单点载荷过大，且失去冗余，不建议</td></tr>
+      <tr><td class="k">4 点</td><td class="n">6.5 kN</td><td class="n">9.7 kN</td><td class="n">16.2 kN</td><td>可行，单点失效后仍能短时承载</td></tr>
+      <tr><td class="k">6 点</td><td class="n">4.3 kN</td><td class="n">6.5 kN</td><td class="n">10.8 kN</td><td>载荷分散更好，但对接容差要求更严</td></tr>
+    </table></div>
+    <p>取 φ20 mm 销、剪切面积 314 mm²，9.7 kN 下剪应力约 <span class="mono">9 712 / 314 = 30.9 MPa</span>，远低于 40Cr 调质后的许用剪切应力（≥200 MPa 量级）。<strong>所以强度裕度很大，真正的问题是间隙、刚度和疲劳：</strong>锁销与孔的配合间隙会在行驶振动中产生冲击，3 g 谱下 10⁶ 次循环足以让接触面微动磨损，进而改变重复定位精度。<span class="tag ti">工程推断</span></p>
+
+    <h3>4.4 补能链路：6 次补能的时间账</h3>
+    <div class="eq">
+      平均充电功率 P = <span class="frac"><span>E<sub>pack</sub> × ΔSOC</span><span>t</span></span>
+      = <span class="frac"><span>50 kWh × 0.5</span><span>18 / 60 h</span></span>
+      ≈ <span class="r">83.3 kW</span>（800 V 母线对应约 104 A，约 1.67 C）
+    </div>
+    <p>这个功率对 800 V 平台不苛刻，但对"车端发电"很苛刻：满油满电补 6 次意味着要送出约 <span class="mono">6 × 50 = 300 kWh</span>。若增程器持续发电 90 kW，需要 3.3 h 才能补回；若只有 60 kW，则需 5 h。<strong>换言之，"6 次补能"是行驶中长时间累积的结果，不是"停在场地上连续快充 6 轮"。</strong>这直接限制了单日可执行的飞行架次，也决定了营地必须配电网而不是只靠一台车。<span class="tag ti">工程推断</span></p>
+  </section>
+
+  <section id="s5">
+    <div class="sec-head"><span class="n">05</span><h2>构型、气动与能量闭合<span class="en">Configuration, Aerodynamics and Energy Closure</span></h2></div>
+    <p>六轴六桨、定距桨（fixed-pitch）意味着没有总距杆，也没有周期变距。推力只由转速决定，姿态由六路推力之差产生的力矩决定。好处是机械极简、电机转矩响应快；代价有两个：一是效率对转速敏感，偏离设计点后迅速下降；二是<strong>偏航通道天生偏弱</strong>——定距桨的反扭矩差在小转速差下不足以产生足够的偏航力矩。</p>
+
+    <p>这正是专用条件 X3.1433 单独为"电涵道"写一条的原因：它要求涵道"在任一电动发动机失效后，必须能提供航空器偏航控制所需的偏航力矩"，并在备用状态时向驾驶员提示故障<sup class="rc"><a href="#r1">[1]</a></sup>。换句话说，<strong>双涵道是降级控制资源，不是升力部件。</strong>把它算进升力，会高估推力裕度；把它当地面附件，又会低估它在单发失效后的作用。两种误读都会让安全分析走偏。</p>
+
+    <div class="tcap"><b>表 5-1</b>悬停功率的一阶估算（880 kg，ISA 海平面，ρ = 1.225 kg/m³）</div>
+    <div class="tw"><table class="tbl">
+      <tr><th>桨径假设 D</th><th>总桨盘面积 A</th><th>理想诱导功率</th><th>轴功率（FM = 0.75）</th><th>20 min 能量</th><th>盘载荷</th></tr>
+      <tr><td class="n">1.6 m</td><td class="n">12.06 m²</td><td class="n">147.5 kW</td><td class="n">196.7 kW</td><td class="n">65.6 kWh</td><td class="n">71.6 kg/m²</td></tr>
+      <tr><td class="n">1.7 m</td><td class="n">13.62 m²</td><td class="n">138.9 kW</td><td class="n">185.1 kW</td><td class="n">61.7 kWh</td><td class="n">64.6 kg/m²</td></tr>
+      <tr><td class="n">1.8 m</td><td class="n">15.27 m²</td><td class="n">131.1 kW</td><td class="n">174.9 kW</td><td class="n">58.3 kWh</td><td class="n">57.6 kg/m²</td></tr>
+    </table></div>
+    <p>计算式为动量理论：<span class="mono">P<sub>ideal</sub> = T<sup>3/2</sup> / √(2ρA)</span>，再除以品质因数 FM。<strong>桨径是本文最关键的假设</strong>：官方只给 6.34 m 翼展与 6 臂布局，没有披露桨径，1.6–1.8 m 是由臂长与桨尖间隙反推的合理区间。盘载荷 58–72 kg/m²，明显高于 EH216-S 一类 16 桨机型，说明它靠"少而大"的桨而不是"多而小"的桨，噪声与效率的权衡偏向效率。</p>
+
+    <div class="tcap"><b>表 5-2</b>50 kWh 电池可用能量下的航时反推（D = 1.7 m，FM = 0.75，可用 45 kWh）</div>
+    <div class="tw"><table class="tbl">
+      <tr><th>任务重量</th><th>悬停轴功率</th><th>20 min 所需能量</th><th>45 kWh 可支撑航时</th><th>对应场景</th></tr>
+      <tr><td class="n">700 kg</td><td class="n">131.4 kW</td><td class="n">43.8 kWh</td><td class="n"><b>20.6 min</b></td><td>单人 + 少量载荷，接近厂方口径</td></tr>
+      <tr><td class="n">800 kg</td><td class="n">160.5 kW</td><td class="n">53.5 kWh</td><td class="n">16.8 min</td><td>双人、无行李</td></tr>
+      <tr><td class="n">880 kg</td><td class="n">185.1 kW</td><td class="n">61.7 kWh</td><td class="n">14.6 min</td><td>双人 + 行李，MTOW 低档</td></tr>
+      <tr><td class="n">960 kg</td><td class="n">211.0 kW</td><td class="n">70.3 kWh</td><td class="n">12.8 min</td><td>MTOW 高档</td></tr>
+    </table></div>
+
+    <div class="fig">
+      <svg viewBox="0 0 780 270" role="img" aria-label="能量供需对比">
+        <text class="svg-mono" x="30" y="26">ENERGY DEMAND vs ON-BOARD SUPPLY / 20 min mission</text>
+        <!-- axis -->
+        <line x1="180" y1="216" x2="700" y2="216" stroke="#2E4256"/>
+        <line x1="180" y1="216" x2="180" y2="50" stroke="#2E4256"/>
+        <g class="svg-mono" text-anchor="middle">
+          <text x="180" y="234">0</text><text x="310" y="234">20</text><text x="440" y="234">40</text>
+          <text x="570" y="234">60</text><text x="700" y="234">80 kWh</text>
+        </g>
+        <!-- bars -->
+        <text class="svg-txt" x="170" y="82" text-anchor="end">880 kg · 无余量</text>
+        <rect x="180" y="64" width="432" height="24" fill="rgba(65,227,206,.22)" stroke="#41E3CE"/>
+        <text class="svg-mono" x="622" y="81" fill="#41E3CE">61.7</text>
+
+        <text class="svg-txt" x="170" y="130" text-anchor="end">960 kg · 无余量</text>
+        <rect x="180" y="112" width="492" height="24" fill="rgba(255,179,71,.18)" stroke="#FFB347"/>
+        <text class="svg-mono" x="682" y="129" fill="#FFB347">70.3</text>
+
+        <text class="svg-txt" x="170" y="178" text-anchor="end">880 kg · 含 20% 余量</text>
+        <rect x="180" y="160" width="518" height="24" fill="rgba(255,107,122,.16)" stroke="#FF6B7A"/>
+        <text class="svg-mono" x="708" y="177" fill="#FF6B7A">74.0</text>
+
+        <text class="svg-txt" x="170" y="226" text-anchor="end" opacity=".65">第三方估计供给</text>
+        <line x1="180" y1="208" x2="530" y2="208" stroke="#71809A" stroke-width="2" stroke-dasharray="5 4"/>
+        <text class="svg-mono" x="540" y="212" fill="#71809A">50.0 kWh（C 级）</text>
+        <!-- deficit bracket -->
+        <line x1="530" y1="200" x2="530" y2="176" stroke="#FF6B7A" stroke-width="1"/>
+        <text class="svg-mono" x="536" y="196" fill="#FF6B7A">缺口 ≈ 24 kWh</text>
+      </svg>
+      <div class="figcap"><b>图 5-1</b>能量闭合校核。若电池确为第三方估计的 50 kWh，则 880 kg 全重 20 min 任务在能量上不闭合，缺口约 24 kWh（含余量）。假设均为 <span class="tag ti">工程推断</span>。</div>
+    </div>
+
+    <div class="note warn"><span class="h">参数自洽性检验</span>若坚持 {880 kg、20 min、50 kWh} 三个数同时成立，反推所需品质因数 FM = 0.926（D = 1.7 m）。小型定距桨在悬停工况的 FM 通常在 0.65–0.80，0.93 不在工程可行区间。<strong>因此三种解释必居其一：电池容量被低估（实际可能 60–70 kWh）、航时在更低任务重量下测得、或厂方口径包含不可用的"名义容量"。</strong>这不是挑错，而是提醒读者：厂方参数通常是"最佳工况"，真实可用值要看飞行手册 B.X3.5 的分重量性能表。</div>
+
+    <p>20 km 航程与 20 min 航时还能互相印证：折算平均地速约 60 km/h，低于 VNE 72 km/h，说明任务剖面里几乎没有长距离巡航段，而是"起降 + 低速盘旋 + 降落"。这也意味着<strong>它的使用方式是"在一个场地里飞"，不是"从 A 飞到 B"。</strong></p>
+  </section>
+
+  <section id="s6">
+    <div class="sec-head"><span class="n">06</span><h2>技术可行性分级<span class="en">Capability Ladder</span></h2></div>
+    <p>"技术可行"是一个太粗的判断。把它拆成四级，可以避免用"已经飞起来了"去回答"能不能交付"。</p>
+    <div class="tcap"><b>表 6-1</b>L1–L4 能力阶梯与证据状态</div>
+    <div class="tw"><table class="tbl">
+      <tr><th style="width:54px">级别</th><th style="width:150px">定义</th><th>关键证据</th><th style="width:110px">状态</th></tr>
+      <tr><td class="n">L1</td><td class="k">概念与缩比验证</td><td>旅航者 T1 / X1 / X2 系列验证机；多旋翼构型与控制律迭代</td><td><span class="tag ta">已通过</span></td></tr>
+      <tr><td class="n">L2</td><td class="k">全尺寸飞行演示</td><td>2025-09 获阿联酋有人驾驶特许飞行证；2026-03 广州工厂 5 台批量试产下线并完成多机试飞；2025-09 长春双机编队演练（含事故）</td><td><span class="tag ta">已验证</span></td></tr>
+      <tr><td class="n">L3</td><td class="k">适航取证</td><td>TC 2024-03 受理、PC 2025-05 受理、专用条件 2025-03 征求意见、2026-07 入选首批合规名录；截至 2026-11 未见公开 TC 颁证</td><td><span class="tag tc">进行中</span></td></tr>
+      <tr><td class="n">L4</td><td class="k">量产交付与运行</td><td>2025-11 首台下线、2026-08 第 1 000 套电推进单元下线；交付计划 2027 年中；营地与培训网络仍在铺设</td><td><span class="tag tq">未启动</span></td></tr>
+    </table></div>
+    <p>这个分级解释了一个常见误判：把 L2 的飞行视频当成 L4 的商业成功。飞行演示证明的是"控制律与结构能工作"，适航取证证明的是"型号设计符合审定基础"，量产交付证明的是"每一台都一致"，运营体系证明的是"每次飞行都安全"。四件事的证据链完全不同，不能互相替代。</p>
+  </section>
+
+  <section id="s7">
+    <div class="sec-head"><span class="n">07</span><h2>适航与监管路径<span class="en">Certification Path</span></h2></div>
+    <p>中国民航局对 X3-F 的处理方式不是按 CCAR-23/27 审，而是按 CCAR-21 第 21.17（二）条的特殊类别，走<strong>轻型运动类（LSA）+ 专用条件</strong>的路径。这个选择决定了产品的法律属性，也决定了它能卖给谁、怎么飞。</p>
+
+    <div class="fig">
+      <svg viewBox="0 0 920 486" role="img" aria-label="X3-F 取证时间线">
+        <text class="svg-mono" x="30" y="24">CERTIFICATION TIMELINE / 2024-03 → 2027-06</text>
+        <line x1="30" y1="38" x2="890" y2="38" stroke="#1A2533"/>
+        <line x1="150" y1="62" x2="150" y2="462" stroke="#2E4256"/>
+        <g>
+          <text class="svg-mono" x="138" y="86" text-anchor="end" fill="#41E3CE">2024-03</text>
+          <circle cx="150" cy="82" r="3.6" fill="#41E3CE"/>
+          <text class="svg-txt" x="172" y="86">TC 受理：型号合格证申请获局方受理</text>
+          <text class="svg-mono" x="890" y="86" text-anchor="end" fill="#41E3CE">已发生</text>
+        </g>
+        <g>
+          <text class="svg-mono" x="138" y="126" text-anchor="end" fill="#FFB347">2025-03</text>
+          <circle cx="150" cy="122" r="3.6" fill="#FFB347"/>
+          <text class="svg-txt" x="172" y="126">X3-F 专用条件（征求意见稿）公示</text>
+          <text class="svg-mono" x="890" y="126" text-anchor="end" fill="#FFB347">政策节点</text>
+        </g>
+        <g>
+          <text class="svg-mono" x="138" y="166" text-anchor="end" fill="#41E3CE">2025-05</text>
+          <circle cx="150" cy="162" r="3.6" fill="#41E3CE"/>
+          <text class="svg-txt" x="172" y="166">PC 受理：生产许可证申请获局方受理</text>
+          <text class="svg-mono" x="890" y="166" text-anchor="end" fill="#41E3CE">已发生</text>
+        </g>
+        <g>
+          <text class="svg-mono" x="138" y="206" text-anchor="end" fill="#FFB347">2025-09</text>
+          <circle cx="150" cy="202" r="3.6" fill="#FFB347"/>
+          <text class="svg-txt" x="172" y="206">获阿联酋有人驾驶特许飞行证（境外示范）</text>
+          <text class="svg-mono" x="890" y="206" text-anchor="end" fill="#FFB347">境外许可</text>
+        </g>
+        <g>
+          <text class="svg-mono" x="138" y="246" text-anchor="end" fill="#41E3CE">2025-11</text>
+          <circle cx="150" cy="242" r="3.6" fill="#41E3CE"/>
+          <text class="svg-txt" x="172" y="246">首台飞行体在广州工厂下线</text>
+          <text class="svg-mono" x="890" y="246" text-anchor="end" fill="#41E3CE">已发生</text>
+        </g>
+        <g>
+          <text class="svg-mono" x="138" y="286" text-anchor="end" fill="#FFB347">2026-02</text>
+          <circle cx="150" cy="282" r="3.6" fill="#FFB347"/>
+          <text class="svg-txt" x="172" y="286">AC-21-AA-2026-45《动力提升航空器适航标准》下发</text>
+          <text class="svg-mono" x="890" y="286" text-anchor="end" fill="#FFB347">政策节点</text>
+        </g>
+        <g>
+          <text class="svg-mono" x="138" y="326" text-anchor="end" fill="#41E3CE">2026-07</text>
+          <circle cx="150" cy="322" r="3.6" fill="#41E3CE"/>
+          <text class="svg-txt" x="172" y="326">入选首批民用载人 eVTOL 适航审定合规企业名录</text>
+          <text class="svg-mono" x="890" y="326" text-anchor="end" fill="#41E3CE">已发生</text>
+        </g>
+        <g>
+          <text class="svg-mono" x="138" y="366" text-anchor="end" fill="#41E3CE">2026-08</text>
+          <circle cx="150" cy="362" r="3.6" fill="#41E3CE"/>
+          <text class="svg-txt" x="172" y="366">第 1 000 套电推进单元下线（产能爬坡信号）</text>
+          <text class="svg-mono" x="890" y="366" text-anchor="end" fill="#41E3CE">已发生</text>
+        </g>
+        <g>
+          <text class="svg-mono" x="138" y="406" text-anchor="end" fill="#FF6B7A">2026-11</text>
+          <circle cx="150" cy="402" r="4.2" fill="#FF6B7A" stroke="#0B1119" stroke-width="1"/>
+          <text class="svg-txt" x="172" y="406" fill="#FF6B7A">本报告证据截止：TC 未见公开颁证记录</text>
+          <text class="svg-mono" x="890" y="406" text-anchor="end" fill="#FF6B7A">CUT-OFF</text>
+        </g>
+        <g>
+          <text class="svg-mono" x="138" y="446" text-anchor="end" fill="#71809A">2027-06</text>
+          <circle cx="150" cy="442" r="3.6" fill="#71809A"/>
+          <text class="svg-txt" x="172" y="446" opacity=".72">计划启动用户交付（企业口径，未经证实）</text>
+          <text class="svg-mono" x="890" y="446" text-anchor="end" fill="#71809A">计划</text>
+        </g>
+      </svg>
+      <div class="figcap"><b>图 7-1</b>取证与量产时间线。青点为已发生且可核实的事件，橙点为政策节点，灰点为计划节点，红点为证据截止线。依据见 <span class="tag ta">A</span>/<span class="tag tb">B</span>/<span class="tag tc">C</span> 三级来源。</div>
+    </div>
+
+    <div class="tcap"><b>表 7-1</b>四证含义与本案状态</div>
+    <div class="tw"><table class="tbl">
+      <tr><th style="width:60px">证件</th><th style="width:210px">审的是什么</th><th>对本案的含义</th><th style="width:116px">状态（2026-11-24）</th></tr>
+      <tr><td class="k">TC</td><td>型号设计是否符合审定基础</td><td>决定"这个型号能不能合法存在"；没有 TC，后面的证都无从谈起</td><td><span class="tag tc">受理，未见颁证</span></td></tr>
+      <tr><td class="k">PC</td><td>批量生产的一致性</td><td>决定"第 2 台、第 100 台是否和第 1 台一样"</td><td><span class="tag tc">受理</span></td></tr>
+      <tr><td class="k">AC</td><td>单机适航</td><td>每架机单独签发；LSA 通常为特殊适航证</td><td><span class="tag tq">未开始</span></td></tr>
+      <tr><td class="k">OC</td><td>商业运营资质</td><td>本案不适用：专用条件已限定不用于商业载客</td><td><span class="tag tq">不适用</span></td></tr>
+    </table></div>
+
+    <div class="tcap"><b>表 7-2</b>专用条件写死的运行限制（不是建议，是审定基础的一部分）</div>
+    <div class="tw"><table class="tbl">
+      <tr><th>限制项</th><th>数值 / 表述</th><th>工程与商业后果</th></tr>
+      <tr><td class="k">运行类型</td><td>昼间目视飞行（Day VFR）</td><td>排除夜航、仪表、低能见度；运营时段被压缩到白天</td></tr>
+      <tr><td class="k">最大高度</td><td>120 m AGL / 2 500 m MSL</td><td>不能越障长距离飞行，也刻意避开有人机常规航路</td></tr>
+      <tr><td class="k">航程 / 航时</td><td>20 km / 20 min</td><td>只能支撑场地内体验，不能支撑点对点交通</td></tr>
+      <tr><td class="k">风速</td><td>0–8.74 m/s（约 5 级）</td><td>营地必须有现场气象监测与禁飞判据</td></tr>
+      <tr><td class="k">乘员</td><td>1 名驾驶员 + 1 名乘客</td><td>单架次收入上限被锁死为 2 人</td></tr>
+      <tr><td class="k">用途</td><td>私人娱乐飞行、飞行培训；不用于商业载客</td><td>不能卖"空中出租车"故事，只能卖"体验 + 培训 + 装备"</td></tr>
+      <tr><td class="k">结构载荷</td><td>机动 +3.5/−1.0（或 ≥+2.0/≤0）</td><td>过载裕度按轻型运动类设定，低于运输类</td></tr>
+      <tr><td class="k">应急着陆</td><td>4.0 g 上 / 9.0 g 前 / 3.0 g 侧 / 4.5 g 下 / 1.5 g 后</td><td>座椅、约束、起落架与机体连接件的设计输入</td></tr>
+      <tr><td class="k">落震</td><td>330 mm 跌落、1.5 倍储备</td><td>起落架行程与缓冲能力的最低验证条件</td></tr>
+    </table></div>
+
+    <div class="note risk"><span class="h">法律后果：不能商业载客</span>《轻型运动类航空器适航审定程序》（AP-21-51R2）明确：航空器取得初级类、限用类或轻型运动类特殊适航证后，<strong>不得从事商业性载客运行</strong><sup class="rc"><a href="#r4">[4]</a></sup>。这条规定把「陆地航母」的市场从"空中出租车"改写成"私人飞行器 + 体验营地 + 飞行培训"。任何把它当网约空中出租车估值的模型，从第一步就不成立。</div>
+
+    <p>2026 年 2 月 12 日，民航局下发《动力提升航空器适航标准》（AC-21-AA-2026-45），适用于最大起飞重量不超过 5 700 kg、最多 9 座、非增压、最大速度不超过 463 km/h 的有人驾驶分布式电推进航空器；若没有新颖独特设计，可不再单独制定专用条件<sup class="rc"><a href="#r2">[2]</a></sup>。这是一次制度性降本：后续同类型号可以走通用标准，而不是"一机一议"。</p>
+    <p>但它没有降低 X3-F 这一型的门槛。折叠机臂（X3.612）、起落架折叠锁定（X3.729）、车载运输（X3.513）三组条款，正是为"分体 + 折叠"这种新颖构型写的——通用标准覆盖不到，所以专用条件仍然必要。<strong>换句话说，通用标准利好的是"下一款"，不是"这一款"。</strong></p>
+  </section>
+
+  <section id="s8">
+    <div class="sec-head"><span class="n">08</span><h2>国际坐标与竞品对照<span class="en">Global Benchmark — Regimes, Roadable Aircraft and eVTOLs</span></h2></div>
+    <p>把 X3-F 放到国际坐标系里，会发现 2025–2026 年正好是"轻型电动垂直起降"被各主要辖区同时纳入制度的一年。这不是巧合，而是同一类产品逼着监管机构做分类。</p>
+
+    <div class="tcap"><b>表 8-1</b>四个辖区的制度对照（截至 2026-11）</div>
+    <div class="tw"><table class="tbl">
+      <tr><th style="width:76px">辖区</th><th style="width:190px">适用类别 / 规章</th><th style="width:110px">载人 / 商业</th><th>安全目标</th><th style="width:150px">对 X3-F 的含义</th></tr>
+      <tr><td class="k">中国 CAAC</td><td>轻型运动类（LSA）+ 专用条件；CCAR-21 第 21.17（二）条</td><td>2 人；<b>不得商业载客</b></td><td>定性表述为主；电动发动机可靠性以"100 h 无总功率丧失"演示<sup class="rc"><a href="#r1">[1]</a></sup></td><td>已受理 TC/PC，路径最实</td></tr>
+      <tr><td class="k">美国 FAA</td><td>Light-Sport Category，14 CFR Part 22（MOSAIC，2025-07-24 生效）；ASTM F3840-26 于 2026-07-16 被接受为 powered-lift / multicopter 的符合性方法<sup class="rc"><a href="#r6">[6]</a></sup><sup class="rc"><a href="#r7">[7]</a></sup></td><td>运动执照限 2 人；不覆盖商业载客</td><td>共识标准（ASTM），无 10⁻⁹ 级定量目标</td><td>制度刚就位，尚未申请；是潜在出海入口</td></tr>
+      <tr><td class="k">欧洲 EASA</td><td>SC-VTOL Issue 2，分 Basic / Enhanced 两类<sup class="rc"><a href="#r9">[9]</a></sup></td><td>Basic 可私人；Enhanced 面向商业</td><td>Basic 1（0–1 客）灾难性 ≤10⁻⁷/h；Enhanced ≤10⁻⁹/h；且不得由单点失效导致</td><td>门槛最高；短期难进入</td></tr>
+      <tr><td class="k">阿联酋 UAE</td><td>特许飞行证 + 低空示范区</td><td>逐案批准</td><td>逐案安全评估</td><td>2025-09 已获特许飞行证，2026-10 首架示范区用机下线</td></tr>
+    </table></div>
+
+    <div class="note"><span class="h">2026 年的制度收敛</span>FAA 的 MOSAIC 规则取消了对轻型运动飞机的重量限制、允许电动与其他动力、允许 rotorcraft 与 powered-lift 进入该类别；配套的 ASTM F3840-26 又把"轻型动力升力/多旋翼"的整机集成标准补齐<sup class="rc"><a href="#r6">[6]</a></sup><sup class="rc"><a href="#r7">[7]</a></sup>。这意味着 <strong>X3-F 这一类"两人、低空、昼间、非商业"的产品，在美国第一次有了明确的审定入口</strong>。中国 LSA 与美国 Part 22 在同年成形，是全球轻型飞行器监管的一次罕见同步。</div>
+
+    <h3>8.1 一体式与分体式：PAL-V 是另一条解</h3>
+    <p>荷兰 PAL-V Liberty 是全球唯一走到 EASA 最后阶段的一体式"飞行汽车"：三轮、自转旋翼、可在公路行驶，2020 年取得欧洲道路认证，2026 年 3 月获荷兰 RDW 汽车生产批准，9 月 7 日获 EASA 生产组织批准（POA），型号合格证预计 2027–2028 年，首批交付 2028 年<sup class="rc"><a href="#r16">[16]</a></sup><sup class="rc"><a href="#r17">[17]</a></sup>。</p>
+
+    <div class="tcap"><b>表 8-2</b>两种"飞行汽车"的工程取舍</div>
+    <div class="tw"><table class="tbl">
+      <tr><th style="width:110px">维度</th><th>PAL-V Liberty（一体式）</th><th>X3-F / 陆地航母（分体式）</th></tr>
+      <tr><td class="k">形态</td><td>三轮车体 + 自转旋翼，飞完可直接开走</td><td>6×6 母舰 + 六旋翼飞行体，飞行体需折叠装舱</td></tr>
+      <tr><td class="k">起降方式</td><td>短距滑跑，起飞距离约 335 m（1 100 ft，MTOW）</td><td>垂直起降，无跑道依赖</td></tr>
+      <tr><td class="k">航程</td><td>约 400 km（250 mi，含 0.5 h 余油）</td><td>20 km</td></tr>
+      <tr><td class="k">陆行</td><td>直接上路；2020 年欧洲道路认证</td><td>由母舰载运；地面驾驶需 C 类驾照</td></tr>
+      <tr><td class="k">取证</td><td>EASA NTO（2024/2025）+ POA（2026-09）；TC 2027–28</td><td>CAAC TC 受理（2024-03）、PC 受理（2025-05）；TC 待颁</td></tr>
+      <tr><td class="k">价格</td><td>35–58.5 万美元（欧洲目录价）</td><td>&lt;200 万元人民币（约 28 万美元）</td></tr>
+      <tr><td class="k">核心瓶颈</td><td>跑道依赖、欧洲 TC 时点、一体式的重量与法规耦合</td><td>折叠/对接链可靠性、航程极短、TC 时点</td></tr>
+    </table></div>
+    <p>两者解决的不是同一个问题。PAL-V 用"一体式"换取门到门的连续性，代价是必须滑跑、结构要同时满足汽车碰撞与航空疲劳；X3-F 用"分体式"换取垂直起降与法规解耦，代价是接口链复杂、航程被压到 20 km。<strong>全球至今没有一个产品同时做到"垂直起降 + 公路行驶 + 商业载客 + 已取证"</strong>——这四件事两两之间都存在工程或法规冲突。</p>
+
+    <h3>8.2 全球竞品横表</h3>
+    <div class="tcap"><b>表 8-3</b>七款代表产品的定位与取证进度</div>
+    <div class="tw"><table class="tbl">
+      <tr><th style="width:120px">产品</th><th style="width:150px">构型 / 类别</th><th style="width:52px">座位</th><th style="width:110px">航程 / 航时</th><th style="width:180px">取证状态</th><th>商业模式</th></tr>
+      <tr><td class="k">X3-F</td><td>分体式，6 升力 + 2 涵道</td><td class="n">2</td><td class="n">20 km / 20 min</td><td>CAAC TC 受理、PC 受理；TC 未颁</td><td>个人娱乐 + 飞行培训</td></tr>
+      <tr><td class="k">EH216-S</td><td>8 轴 16 桨，无人驾驶</td><td class="n">2</td><td class="n">30 km / 25 min</td><td>TC + PC + AC + OC 全套（2023–2024）<sup class="rc"><a href="#r13">[13]</a></sup></td><td>景区观光、空中游览</td></tr>
+      <tr><td class="k">Joby S4</td><td>倾转六旋翼</td><td class="n">4+1</td><td class="n">约 160 km（宣称）</td><td>FAA TIA 第五阶段（2026-03 起）<sup class="rc"><a href="#r15">[15]</a></sup></td><td>空中出租车</td></tr>
+      <tr><td class="k">Archer Midnight</td><td>12 倾转旋翼</td><td class="n">4+1</td><td class="n">约 100 km（宣称）</td><td>FAA 四阶段之第三阶段关闭；Market Survey 特殊适航证（非 TC）<sup class="rc"><a href="#r26">[26]</a></sup></td><td>城市空中出行</td></tr>
+      <tr><td class="k">PAL-V Liberty</td><td>三轮 + 自转旋翼，一体式</td><td class="n">2</td><td class="n">约 400 km</td><td>道路 2020；EASA POA 2026-09；TC 2027–28<sup class="rc"><a href="#r17">[17]</a></sup></td><td>私人 FlyDrive</td></tr>
+      <tr><td class="k">峰飞 V2000CG</td><td>复合翼，货运</td><td class="n">货</td><td class="n">—</td><td>TC/PC/AC（2024）；印尼型号认可 2026-06<sup class="rc"><a href="#r25">[25]</a></sup></td><td>低空物流</td></tr>
+      <tr><td class="k">汇天 A868</td><td>全倾转</td><td class="n">—</td><td class="n">—</td><td>2026-11-22 倾转过渡试飞成功<sup class="rc"><a href="#r23">[23]</a></sup></td><td>城际（在研）</td></tr>
+    </table></div>
+    <p>这张表最重要的信息不是参数高低，而是<strong>"取证深度"与"商业叙事"的错配</strong>。EH216-S 四证齐全，但只能做景区观光；Joby 与 Archer 的航程、座位、商业故事都更像"交通"，却都还在最终审定的门口；X3-F 的订单最多、价格最低，但 TC 尚未落地。三者处在完全不同的风险位置，不能用同一套估值逻辑比较。</p>
+  </section>
+
+  <section id="s9">
+    <div class="sec-head"><span class="n">09</span><h2>应用场景的边界<span class="en">Use Cases — What the Envelope Allows</span></h2></div>
+    <p>场景不是"想不想做"，而是"参数 + 法规"共同裁定的结果。把每个场景放到"技术匹配 × 监管可行"的平面上，答案会很清楚。</p>
+
+    <div class="fig">
+      <svg viewBox="0 0 920 470" role="img" aria-label="场景象限图">
+        <text class="svg-mono" x="30" y="24">USE-CASE MAP / TECHNICAL FIT vs REGULATORY FEASIBILITY</text>
+        <!-- quadrants -->
+        <rect x="70" y="60" width="300" height="175" fill="rgba(255,255,255,.015)"/>
+        <rect x="370" y="60" width="300" height="175" fill="rgba(65,227,206,.05)"/>
+        <rect x="70" y="235" width="300" height="175" fill="rgba(255,255,255,.01)"/>
+        <rect x="370" y="235" width="300" height="175" fill="rgba(255,179,71,.03)"/>
+        <line x1="370" y1="60" x2="370" y2="410" stroke="#2E4256"/>
+        <line x1="70" y1="235" x2="670" y2="235" stroke="#2E4256"/>
+        <rect x="70" y="60" width="600" height="350" fill="none" stroke="#2A3A4C"/>
+        <text class="svg-mono" x="84" y="80" fill="#71809A">技术弱 · 监管强</text>
+        <text class="svg-mono" x="656" y="80" fill="#41E3CE" text-anchor="end">双强 · 可落地</text>
+        <text class="svg-mono" x="84" y="404" fill="#71809A">双弱 · 不做</text>
+        <text class="svg-mono" x="656" y="404" fill="#FFB347" text-anchor="end">技术强 · 监管弱</text>
+        <text class="svg-mono" x="370" y="440" text-anchor="middle">技术匹配度 →</text>
+        <text class="svg-mono" x="30" y="235" transform="rotate(-90 30 235)" text-anchor="middle">监管可行度 →</text>
+
+        <g>
+          <circle cx="598" cy="123" r="17" fill="rgba(126,224,163,.18)" stroke="#7EE0A3"/><text class="svg-mono" x="598" y="127" text-anchor="middle" fill="#7EE0A3">1</text>
+          <circle cx="550" cy="109" r="17" fill="rgba(126,224,163,.18)" stroke="#7EE0A3"/><text class="svg-mono" x="550" y="113" text-anchor="middle" fill="#7EE0A3">2</text>
+          <circle cx="502" cy="193" r="17" fill="rgba(255,179,71,.16)" stroke="#FFB347"/><text class="svg-mono" x="502" y="197" text-anchor="middle" fill="#FFB347">3</text>
+          <circle cx="538" cy="333" r="17" fill="rgba(255,107,122,.14)" stroke="#FF6B7A"/><text class="svg-mono" x="538" y="337" text-anchor="middle" fill="#FF6B7A">4</text>
+          <circle cx="175" cy="376" r="17" fill="rgba(255,107,122,.14)" stroke="#FF6B7A"/><text class="svg-mono" x="175" y="380" text-anchor="middle" fill="#FF6B7A">5</text>
+          <circle cx="238" cy="388" r="17" fill="rgba(255,107,122,.14)" stroke="#FF6B7A" opacity=".8"/><text class="svg-mono" x="238" y="392" text-anchor="middle" fill="#FF6B7A">6</text>
+          <circle cx="148" cy="332" r="17" fill="rgba(255,107,122,.14)" stroke="#FF6B7A" opacity=".8"/><text class="svg-mono" x="148" y="336" text-anchor="middle" fill="#FF6B7A">7</text>
+        </g>
+
+        <!-- legend -->
+        <g>
+          <text class="svg-mono" x="700" y="86">LEGEND</text>
+          <line x1="700" y1="96" x2="890" y2="96" stroke="#1A2533"/>
+          <text class="svg-mono" x="700" y="124" fill="#7EE0A3">1</text><text class="svg-txt" x="716" y="124">营地体验飞行</text><text class="svg-mono" x="890" y="124" text-anchor="end" fill="#7EE0A3">GO</text>
+          <text class="svg-mono" x="700" y="154" fill="#7EE0A3">2</text><text class="svg-txt" x="716" y="154">飞行培训</text><text class="svg-mono" x="890" y="154" text-anchor="end" fill="#7EE0A3">GO</text>
+          <text class="svg-mono" x="700" y="184" fill="#FFB347">3</text><text class="svg-txt" x="716" y="184">私人自飞</text><text class="svg-mono" x="890" y="184" text-anchor="end" fill="#FFB347">HOLD</text>
+          <text class="svg-mono" x="700" y="214" fill="#FF6B7A">4</text><text class="svg-txt" x="716" y="214">景区空中游览</text><text class="svg-mono" x="890" y="214" text-anchor="end" fill="#FF6B7A">NO</text>
+          <text class="svg-mono" x="700" y="244" fill="#FF6B7A">5</text><text class="svg-txt" x="716" y="244">城际通勤</text><text class="svg-mono" x="890" y="244" text-anchor="end" fill="#FF6B7A">NO</text>
+          <text class="svg-mono" x="700" y="274" fill="#FF6B7A">6</text><text class="svg-txt" x="716" y="274">应急救援</text><text class="svg-mono" x="890" y="274" text-anchor="end" fill="#FF6B7A">NO</text>
+          <text class="svg-mono" x="700" y="304" fill="#FF6B7A">7</text><text class="svg-txt" x="716" y="304">农林作业</text><text class="svg-mono" x="890" y="304" text-anchor="end" fill="#FF6B7A">NO</text>
+        </g>
+      </svg>
+      <div class="figcap"><b>图 9-1</b>场景象限。位于右上且监管可行的只有营地体验与飞行培训；景区游览技术匹配但被"不得商业载客"一条锁死。评分为本文判断，非厂家数据。</div>
+    </div>
+
+    <div class="tcap"><b>表 9-1</b>场景评估</div>
+    <div class="tw"><table class="tbl">
+      <tr><th style="width:110px">场景</th><th style="width:66px">技术</th><th style="width:66px">监管</th><th>判定理由</th></tr>
+      <tr><td class="k">营地体验飞行</td><td><span class="tag ta">高</span></td><td><span class="tag ta">高</span></td><td>20 min／20 km 正好匹配"起降 + 盘旋"的体验剖面；场地封闭、昼间、无商业载客，与专用条件完全吻合</td></tr>
+      <tr><td class="k">飞行培训</td><td><span class="tag ta">高</span></td><td><span class="tag ta">高</span></td><td>专用条件明确允许培训用途；单杆操纵、自动辅助降低了上手门槛</td></tr>
+      <tr><td class="k">私人自飞</td><td><span class="tag tc">中</span></td><td><span class="tag tc">中</span></td><td>需自持执照、自建或租用起降场地；空域申请与维护责任落在个人身上</td></tr>
+      <tr><td class="k">景区空中游览</td><td><span class="tag tc">中高</span></td><td><span class="tag tq">低</span></td><td>属于商业载客，LSA 特殊适航证不允许；除非改为"体验飞行 + 培训"包装</td></tr>
+      <tr><td class="k">城际通勤</td><td><span class="tag tq">低</span></td><td><span class="tag tq">低</span></td><td>20 km 航程、120 m 高度、昼间 VFR，三条同时否定</td></tr>
+      <tr><td class="k">应急救援</td><td><span class="tag tq">低</span></td><td><span class="tag tq">低</span></td><td>无夜航、无仪表、无外部载荷接口，且需要 OC 与特殊运行批准</td></tr>
+      <tr><td class="k">农林作业</td><td><span class="tag tq">低</span></td><td><span class="tag tq">低</span></td><td>载人平台做作业，成本与风险都高于专用无人机</td></tr>
+    </table></div>
+
+    <p><strong>为什么"通勤"在算术上就不成立：</strong>标称 20 km 航程，扣 20% 余量只剩 16 km；再扣起降与爬升约 3 min，20 min 航时只剩约 11 min 巡航。以 60 km/h 计，单程约 11 km；若要求返航，单程半径只剩 5–6 km。<strong>这个半径覆盖不了任何真实的城市通勤走廊，只覆盖一个营地。</strong></p>
+  </section>
+
+  <section id="s10">
+    <div class="sec-head"><span class="n">10</span><h2>市场可行性<span class="en">Market Feasibility</span></h2></div>
+    <p>市场讨论最容易犯的错，是拿宏观 TAM 给单一产品背书。先把三个口径分开：全球 UAM 总可及市场、中国低空经济总产值、以及"一款 200 万元两人飞行器"能触达的收入。三者相差四到五个数量级。</p>
+
+    <div class="tcap"><b>表 10-1</b>宏观口径对照（不可直接相加或相互替代）</div>
+    <div class="tw"><table class="tbl">
+      <tr><th style="width:150px">来源 / 口径</th><th>2040</th><th>2050</th><th>说明</th></tr>
+      <tr><td class="k">Morgan Stanley · 基准</td><td class="n">1 万亿美元</td><td class="n">9 万亿美元</td><td>UAM 总可及市场，含货运、国防与使能技术<sup class="rc"><a href="#r28">[28]</a></sup></td></tr>
+      <tr><td class="k">Morgan Stanley · 乐观</td><td class="n">4.4 万亿美元</td><td class="n">18.9 万亿美元</td><td>假设政策宽松、基础设施就位、成本快速下降</td></tr>
+      <tr><td class="k">Morgan Stanley · 悲观</td><td class="n">3 590 亿美元</td><td class="n">2.3 万亿美元</td><td>技术停滞 + 政策限制</td></tr>
+      <tr><td class="k">中国低空经济</td><td class="n">—</td><td class="n">—</td><td>2023 年 5 059.5 亿元；2026 年预计超 1 万亿元；2035 年预计 3.5 万亿元<sup class="rc"><a href="#r24">[24]</a></sup></td></tr>
+    </table></div>
+    <p>把 9 万亿美元当成"飞行汽车的市场"，是把 TAM 当成了可支配收入。真正该算的是：<strong>一款单价 200 万元、年产 1 万台的产品，满产年收入约 200 亿元，仅相当于中国低空经济 2026 年预测总值的 2%。</strong>宏观数字能说明赛道存在，不能说明这一款产品成立。</p>
+
+    <h3>10.1 单机单位经济模型</h3>
+    <p>按"营地自营"模式做一张教学假设的损益表。假设：单机 200 万元、5 年折旧；场地与资质 200 万元、10 年摊销；两名飞行员 + 两名地勤 80 万元/年；场地、空域、保险与管理 60 万元/年；直接运营成本（能源、维护、耗材）按收入 35% 计；年运营 250 天。</p>
+    <div class="tcap"><b>表 10-2</b>单机年度损益与静态回收期（教学假设，非企业数据）</div>
+    <div class="tw"><table class="tbl">
+      <tr><th>情景</th><th>日架次 × 2 人 × 单价</th><th>年收入</th><th>EBIT</th><th>静态回收期</th></tr>
+      <tr><td class="k">保守</td><td class="n">4 × 2 × 1 200 元</td><td class="n">240 万元</td><td class="n">−44 万元</td><td class="n">无法回收</td></tr>
+      <tr><td class="k">基准</td><td class="n">6 × 2 × 1 800 元</td><td class="n">540 万元</td><td class="n">151 万元</td><td class="n">2.6 年</td></tr>
+      <tr><td class="k">乐观</td><td class="n">8 × 2 × 2 500 元</td><td class="n">1 000 万元</td><td class="n">450 万元</td><td class="n">0.9 年</td></tr>
+      <tr><td class="k">盈亏平衡</td><td class="n">—</td><td class="n">308 万元</td><td class="n">0</td><td class="n">—</td></tr>
+    </table></div>
+    <p>盈亏平衡点约 <strong>308 万元/年</strong>，折合 6 架次/日、单价 1 028 元，或 4.3 架次/日、单价 1 800 元。这个门槛不高，但前提是"每天都飞得出去"——空域审批、天气、事故停飞、季节性客流，任何一项都能把 250 个运营日打到 150 天以下，模型立刻翻负。</p>
+
+    <h3>10.2 订单、产能与交付</h3>
+    <div class="tcap"><b>表 10-3</b>商业化要素</div>
+    <div class="tw"><table class="tbl">
+      <tr><th>要素</th><th>公开数据</th><th>性质</th></tr>
+      <tr><td class="k">累计订单</td><td>7 000 台（2026-07-17 口径）</td><td>意向金订单，非确认收入</td></tr>
+      <tr><td class="k">单价</td><td>不超过 200 万元</td><td>企业口径；正式大定权益含执照培训</td></tr>
+      <tr><td class="k">产能</td><td>规划年产 1 万台；初期约 5 000 台</td><td>工厂规划，非已实现产能</td></tr>
+      <tr><td class="k">制造节点</td><td>2025-11 首台下线；2026-03 五台批量试产；2026-08 第 1 000 套电推进单元</td><td>可核实的量产爬坡信号</td></tr>
+      <tr><td class="k">交付</td><td>2027 年中启动</td><td>计划；取决于 TC 颁证</td></tr>
+      <tr><td class="k">海外</td><td>2025-09 阿联酋特许飞行证；2026-10 首架示范区用机下线</td><td>示范运行，不等于销售</td></tr>
+    </table></div>
+    <p>7 000 台按 200 万元计，潜在 GMV 约 140 亿元。但意向金通常为 1 万元量级，转化率取决于三个变量：TC 时点、交付排队、以及用户是否真的能在居住地附近找到可飞场地。<strong>第三个变量最容易被低估——没有营地网络，飞行器就是一件不能用的展品。</strong></p>
+
+    <div class="tcap"><b>表 10-4</b>主要市场风险</div>
+    <div class="tw"><table class="tbl">
+      <tr><th style="width:130px">风险</th><th>触发条件</th><th>影响</th></tr>
+      <tr><td class="k">TC 延迟</td><td>符合性验证发现问题、局方试飞增加科目</td><td>交付整体后移，订单流失</td></tr>
+      <tr><td class="k">空域与场地</td><td>营地审批滞后、空域未纳入低空航图</td><td>飞机卖得出、飞不了</td></tr>
+      <tr><td class="k">事故舆情</td><td>演示或训练事故（如 2025-09 长春事件）</td><td>短期停飞、保险上浮、信任受损</td></tr>
+      <tr><td class="k">供应链</td><td>电推进单元、复材、航空电池产能</td><td>爬坡不及规划</td></tr>
+      <tr><td class="k">二手残值</td><td>技术迭代快、机型停产</td><td>影响复购与租赁模型</td></tr>
+    </table></div>
+  </section>
+
+  <section id="s11">
+    <div class="sec-head"><span class="n">11</span><h2>工程化路线<span class="en">Industrialisation Gates</span></h2></div>
+    <p>把"什么时候能买"拆成四道门。每道门有明确判据，也都有明确的卡点。</p>
+    <div class="tcap"><b>表 11-1</b>四道 Gate 与当前状态</div>
+    <div class="tw"><table class="tbl">
+      <tr><th style="width:54px">Gate</th><th style="width:150px">名称</th><th>通过判据</th><th style="width:120px">当前状态</th></tr>
+      <tr><td class="n">G1</td><td class="k">设计冻结与构型控制</td><td>折叠/对接接口冻结，供应商定点，试验大纲获批</td><td><span class="tag ta">已通过</span></td></tr>
+      <tr><td class="n">G2</td><td class="k">适航符合性（TC）</td><td>专用条件全部条款有符合性证据，局方试飞完成，TC 颁发</td><td><span class="tag tc">进行中</span></td></tr>
+      <tr><td class="n">G3</td><td class="k">量产一致性（PC）</td><td>质量体系审核通过，首批准装机一致性抽查合格</td><td><span class="tag tc">进行中</span></td></tr>
+      <tr><td class="n">G4</td><td class="k">运行与服务体系</td><td>营地、培训、维修、保险、应急响应形成闭环</td><td><span class="tag tq">起步</span></td></tr>
+    </table></div>
+    <p><strong>Go/No-Go 判据：</strong>G2 未过而强行交付，等于把适航风险转嫁给用户；G4 未过而强行铺量，等于把运行风险转嫁给营地。两者都会以事故的形式回到企业身上。对用户而言，真正该问的不是"什么时候交付"，而是"交付时 TC 与营地是否同时到位"。</p>
+  </section>
+
+  <section id="s12">
+    <div class="sec-head"><span class="n">12</span><h2>局限与待核实<span class="en">Limitations &amp; Open Questions</span></h2></div>
+    <ul>
+      <li><strong>最大起飞重量口径冲突。</strong>同一份征求意见稿内 880 kg 与 960 kg 并存，本文所有载荷与功率计算均给出两档，最终值待 TCDS。</li>
+      <li><strong>电池容量未披露。</strong>约 50 kWh 来自第三方估算（C 级）；本文的能量闭合结论建立在"若 50 kWh 成立"的前提上，若实际为 60–70 kWh，结论需重算。</li>
+      <li><strong>桨径、铰链级数、作动器数量均为推断。</strong>官方只披露"6 副机臂与桨叶可折叠""8 个控制模块、14 个作动机构"，未披露具体运动学方案。</li>
+      <li><strong>折叠后重复定位精度未知。</strong>本文的容差预算用于说明"为什么需要主动引导"，不代表厂家实际指标。</li>
+      <li><strong>陆行体的汽车公告准入未见披露。</strong>这是与适航并行的第二道法定门槛，公开信息缺失。</li>
+      <li><strong>TC 颁证时点无法确认。</strong>局方证件公示可能不完整，"未见公告"不等于"未颁证"。</li>
+      <li><strong>订单转化率、退订率、海外订单结构均未披露。</strong>本文只按意向订单处理，不折算收入。</li>
+      <li><strong>2025-09 长春事件的原因调查结论未公开。</strong>本文只把它当作已发生的危害链证据，不推断具体失效机理。</li>
+    </ul>
+  </section>
+
+  <section id="refs">
+    <div class="sec-head"><span class="n">13</span><h2>参考文献<span class="en">References</span></h2></div>
+    <p style="font-size:12.5px;color:var(--txt-3)">按证据等级分组。A 级为局方/标准文件，B 级为企业官方披露，C 级为第三方权威媒体与行业数据库，D 级自媒体未列入正文结论。</p>
+    <h4>A · 局方与标准文件</h4>
+    <ol class="refs">
+      <li id="r1">中国民用航空局. X3-F 型航空器专用条件（征求意见稿）[Z]. 2025-03-17. <a href="http://www.caac.gov.cn/HDJL/YJZJ/202503/t20250318_226976.html">caac.gov.cn/HDJL/YJZJ/202503/t20250318_226976.html</a></li>
+      <li id="r2">中国民用航空局. 动力提升航空器适航标准（AC-21-AA-2026-45）[Z]. 2026-02-12. <a href="http://www.caac.gov.cn/XXGK/XXGK/GFXWJ/202602/P020260226344192407264.pdf">caac.gov.cn/.../P020260226344192407264.pdf</a></li>
+      <li id="r3">中国民用航空局. 限用类无人驾驶航空器系统适航标准（AC-21-AA-2026-44）[Z]. 2026-02-12.</li>
+      <li id="r4">中国民用航空局. 轻型运动类航空器适航审定程序（AP-21-51R2）[Z]. 2025-08-26.</li>
+      <li id="r5">中国民用航空局. 亿航 EH216-S 型无人驾驶航空器系统专用条件[Z]. 2022-02.</li>
+      <li id="r6">Federal Aviation Administration. Modernization of Special Airworthiness Certification (MOSAIC), Final Rule, 90 FR 35034[Z]. 2025-07-24. <a href="https://www.federalregister.gov/citation/90-FR-35221">federalregister.gov/citation/90-FR-35221</a></li>
+      <li id="r7">Federal Aviation Administration. Accepted Consensus Standards for Light-Sport Category Aircraft: Airplane, Glider, Powered Lift, and Gyroplane, 91 FR 43524[Z]. 2026-07-16. <a href="https://www.federalregister.gov/documents/2026/07/16/2026-14298/accepted-consensus-standards-for-light-sport-category-aircraft-airplane-glider-powered-lift-and">federalregister.gov/.../2026-14298</a></li>
+      <li id="r8">Federal Aviation Administration. Light-Sport Category Aircraft（含 ASTM F3840-26 受理说明）[EB/OL]. 2026-10-06. <a href="https://www.faa.gov/aircraft/gen_av/light_sport">faa.gov/aircraft/gen_av/light_sport</a></li>
+      <li id="r9">European Union Aviation Safety Agency. Special Condition for VTOL Aircraft (SC-VTOL, Issue 2) and MOC SC-VTOL[Z]. 2019 / 2021（Issue 2 后续修订）.</li>
+      <li id="r10">ASTM International. F2840-14(2023)（电动发动机）、F2506-22（螺旋桨）、F3840-26（轻型动力升力/多旋翼集成）[S].</li>
+    </ol>
+    <h4>B · 企业官方与教学材料</h4>
+    <ol class="refs" start="11">
+      <li id="r11">张玉新. 飞行汽车技术基础：第四章 飞行汽车的现状及展望；第五章 飞行汽车产业分析及支撑技术[R]. 吉林大学, 2026.（课程讲义）</li>
+      <li id="r12">汇天（Aridge / 小鹏汇天）. 官方网站与产品资料[EB/OL]. <a href="https://cn.aridge.com/about">cn.aridge.com/about</a></li>
+      <li id="r13">亿航智能. EH216-S 产品页与适航三证说明[EB/OL]. <a href="https://www.ehang.com/cn/ehang216s/">ehang.com/cn/ehang216s</a></li>
+      <li id="r14">亿航智能. 关于我们：90 000+ 安全飞行架次、24 国运行（截至 2026-11）[EB/OL]. <a href="https://www.ehang.com/cn/about/">ehang.com/cn/about</a></li>
+      <li id="r15">Joby Aviation. Joby's First FAA-Conforming Aircraft Takes Flight[EB/OL]. 2026-03-11. <a href="https://www.jobyaviation.com/news/joby-s-first-faa-conforming-aircraft-takes-flight">jobyaviation.com/news/...</a></li>
+      <li id="r16">PAL-V. FlyDrive Company PAL-V Clears Essential Certification Milestone[EB/OL]. 2025-04. <a href="https://www.pal-v.com/en/press/flydrive-company-pal-v-clears-essential-certification-milestone">pal-v.com/en/press/...</a></li>
+      <li id="r17">PAL-V. Turning Vision into Reality（公司里程碑：2020 道路认证、2026 POA、2028 交付）[EB/OL]. <a href="https://www.pal-v.com/en/company">pal-v.com/en/company</a></li>
+    </ol>
+    <h4>C · 第三方权威媒体与行业数据库</h4>
+    <ol class="refs" start="18">
+      <li id="r18">澎湃新闻. 小鹏汇天回应长春事故：两架飞行器飞行间距不足发生接触，现场人员安全[N]. 2025-09-16. <a href="https://www.thepaper.cn/newsDetail_forward_31620107">thepaper.cn/newsDetail_forward_31620107</a></li>
+      <li id="r19">财新网. 小鹏汇天飞行器在长春航展表演时坠落起火 气象台当日发布大风蓝色预警[N]. 2025-09-16. <a href="https://www.caixin.com/2025-09-16/102363078.html">caixin.com/2025-09-16/102363078.html</a></li>
+      <li id="r20">科创板日报. 长春航空展预演现 eVTOL 事故，小鹏汇天回应[N]. 2025-09-16.</li>
+      <li id="r21">凤凰网科技（引雷峰网）. 200 万元买辆车再带架飞机？小鹏"陆地航母"交付时间曝光[N]. 2026-11-06. <a href="https://view.inews.qq.com/k/20261106A0DFRU00">view.inews.qq.com/k/20261106A0DFRU00</a></li>
+      <li id="r22">太平洋科技. 小鹏汇天等 4 家企业入选首批民用载人 eVTOL 适航审定合规企业名录[N]. 2026-07-22. <a href="https://view.inews.qq.com/a/20260722A0AD1A00">view.inews.qq.com/a/20260722A0AD1A00</a></li>
+      <li id="r23">36 氪. 小鹏汇天首款全尺寸全倾转电动飞行汽车 A868 倾转过渡试飞成功[N]. 2026-11-22. <a href="https://36kr.com/newsflashes/4080469303268486">36kr.com/newsflashes/4080469303268486</a></li>
+      <li id="r24">36 氪. 飞行汽车：开启规模化试飞（含中国低空经济规模数据）[N]. 2025-08-07. <a href="https://36kr.com/p/3411989752253832">36kr.com/p/3411989752253832</a></li>
+      <li id="r25">新华网. "飞起来、用起来"，这场低空经济盛会看点多（含峰飞 V2000CG 三证与印尼型号认可）[N]. 2026-07-25. <a href="https://www.news.cn/tech/20260725/fdf84a65a382461d911f6d43f894bfe7/c.html">news.cn/tech/20260725/...</a></li>
+      <li id="r26">Drone Intelligence. eVTOL Certification Status 2026: FAA, EASA and CAAC by Maker[EB/OL]. 2026-11. <a href="https://droneintelligence.ai/evtol-certification-tracker">droneintelligence.ai/evtol-certification-tracker</a></li>
+      <li id="r27">中国航空新闻网. eVTOL 适航竞速观察：Joby 进入最后阶段、Archer 收购 Wisk、Vertical 延期至 2028[N]. 2026-09-30.</li>
+      <li id="r28">Morgan Stanley Research. eVTOL/Urban Air Mobility TAM Update: A Slow Take-Off, But Sky's the Limit[R]. 2021. <a href="https://www.morganstanley.com/ideas/autonomous-aircraft">morganstanley.com/ideas/autonomous-aircraft</a></li>
+      <li id="r29">NASA. Reliability and Safety Assessment of Urban Air Mobility Concept Vehicles, CR-20210017188[R]. 2021. <a href="https://ntrs.nasa.gov/citations/20210017188">ntrs.nasa.gov/citations/20210017188</a></li>
+    </ol>
+    <div class="note" style="margin-top:26px"><span class="h">数据说明</span>文中所有工程计算（折叠比、容差合成、锁销载荷、悬停功率、能量闭合、单位经济模型）均以 Python 3.11 脚本复算，输入假设已在表注中列出；媒体与自媒体口径仅用于时间线与订单，不用于工程结论。</div>
+  </section>
+
+
+  </div>
+</main>
+
+<footer><div class="in">
+  <div>吉林大学 汽车工程学院 · 《飞行汽车技术基础》课程作业 01</div>
+  <div>韦国全 · 2026-11-24 · 证据分级 A/B/C/D</div>
+</div></footer>
+
+<script>
+const bar=document.getElementById('pbar');
+addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const p=h.scrollTop/(h.scrollHeight-h.clientHeight);
+  bar.style.width=(p*100).toFixed(1)+'%';
+},{passive:true});
+const links=[...document.querySelectorAll('.toc a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+function syncToc(){
+  const y=window.scrollY+window.innerHeight*0.28;
+  let cur=secs[0];
+  secs.forEach(s=>{ if(s.getBoundingClientRect().top+window.scrollY<=y) cur=s; });
+  links.forEach(l=>l.classList.toggle('on', l.getAttribute('href')==='#'+cur.id));
+}
+addEventListener('scroll',syncToc,{passive:true});
+addEventListener('resize',syncToc);
+syncToc();
+</script>
+</body>
+</html>
